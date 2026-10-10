@@ -1,0 +1,14 @@
+---
+import { enumerateDocumentRoutes } from '@/lib/loadData';
+import { resolveTemplate } from '@/lib/templates';
+
+export const getStaticPaths = () => enumerateDocumentRoutes();
+
+const { business, document } = Astro.props;
+
+// El template del menú pisa al del negocio: un mismo negocio puede tener la
+// portada editorial y una carta en grid sin duplicar el business.json.
+const { DocumentView } = resolveTemplate(document.template ?? business.template);
+---
+
+<DocumentView {...Astro.props} />

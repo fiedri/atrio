@@ -1,0 +1,72 @@
+export type SocialPlatform =
+  | 'instagram'
+  | 'facebook'
+  | 'tiktok'
+  | 'whatsapp'
+  | 'web'
+  | 'tripadvisor'
+  | 'delivery';
+
+/**
+ * Cada valor tiene que existir en TEMPLATES (src/lib/templates.ts) y, si es un
+ * stub, el JSON que lo use tiene que cambiar antes de publicar: `resolveTemplate`
+ * tira en build antes de que llegue al render.
+ */
+export type BusinessTemplate = 'editorial' | 'grid' | 'gallery' | 'pastel-link-hub';
+
+export type HexColor = string; // Patrón: ^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$
+
+export interface SocialLink {
+  platform: SocialPlatform;
+  url: string;
+  label?: string;
+}
+
+export interface ColorsOverride {
+  background?: HexColor;
+  surface?: HexColor;
+  text?: HexColor;
+  textMuted?: HexColor;
+  accent?: HexColor;
+  border?: HexColor;
+}
+
+export interface TypographyOverride {
+  fontFamily?: string;
+  headingWeight?: number; // 100 - 900
+  bodyWeight?: number;    // 100 - 900
+  scale?: number;         // 0.5 - 3
+}
+
+export interface SpacingOverride {
+  gap?: number;     // 0 - 64
+  padding?: number; // 0 - 64
+  radius?: number;  // 0 - 64
+}
+
+export interface BackgroundOverride {
+  image?: string;
+  video?: string;
+  videoPoster?: string; // Obligatorio si hay video
+}
+
+export interface StylesOverride {
+  colors?: ColorsOverride;
+  typography?: TypographyOverride;
+  spacing?: SpacingOverride;
+  background?: BackgroundOverride;
+}
+
+export interface Business {
+  name: string;
+  description?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  logo?: string;
+  isActive?: boolean;
+  template: BusinessTemplate;
+  socialLinks: SocialLink[];
+  styles?: StylesOverride;
+}

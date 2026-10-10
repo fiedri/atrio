@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Document",
+  "description": "Un menú dentro de un negocio. El archivo vive en public/menus/{businessSlug}/{documentSlug}/document.json",
+  "type": "object",
+  "required": ["title", "status", "pages"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Título del menú, que se muestra como encabezado en la página pública. Ej: \"Carta Principal\"."
+    },
+    "description": {
+      "type": "string",
+      "description": "Descripción corta, opcional. Ej: \"Todos los días de 12 a 23hs\"."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "published", "archived"],
+      "description": "draft: no se muestra. published: visible al público. archived: oculto pero conservado. Si solo te importa visible/oculto, usá isVisible en su lugar."
+    },
+    "pages": {
+      "type": "array",
+      "description": "Rutas relativas al document.json. El orden de la lista ES el orden de lectura en la página; el pad de dos dígitos (01, 02, ... 10) es lo que mantiene ese orden correcto al ordenar alfabéticamente.",
+      "items": {
+        "type": "string",
+        "pattern": "^\\./pages/[0-9]{2}\\.webp$",
+        "description": "Ruta de la imagen de la página. Ej: \"./pages/01.webp\""
+      }
+    },
+    "template": {
+      "type": "string",
+      "enum": ["editorial", "grid", "gallery", "pastel-link-hub"],
+      "description": "Plantilla de este menú. Si se omite, se usa la del business.json."
+    },
+    "styles": {
+      "allOf": [{ "$ref": "businesses.json#/$defs/stylesOverride" }],
+      "description": "Override parcial sobre el tema del negocio. Solo lo que difiera — no repitas el bloque completo. Lo que declares pisa al negocio; lo que omitas se hereda."
+    }
+  },
+  "additionalProperties": false
+}

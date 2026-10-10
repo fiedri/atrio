@@ -1,0 +1,18 @@
+---
+/**
+ * Placeholder de los templates registrados pero no implementados.
+ *
+ * Nunca debería renderizarse: `resolveTemplate` (src/lib/templates.ts) tira
+ * antes, en build, con un mensaje que dice qué falta hacer. Si llegás a ver
+ * esto en pantalla, es un bug en el guard de resolveTemplate.
+ */
+interface Props {
+  name?: string;
+}
+
+const { name } = Astro.props;
+---
+
+<main class="p-menu">
+  <h1>{name ?? 'Template'} todavía no está implementado.</h1>
+</main>

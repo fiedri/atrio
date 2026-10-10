@@ -1,0 +1,15 @@
+---
+import { enumerateBusinessRoutes } from '@/lib/loadData';
+import { resolveTemplate } from '@/lib/templates';
+
+export const getStaticPaths = () => enumerateBusinessRoutes();
+
+const { business } = Astro.props;
+
+// Tirar acá y no en el render: resolveTemplate valida el id antes de que se
+// dibuje nada, así el error de build es el mensaje entero y no un stack de tres
+// frames de Astro.
+const { BusinessView } = resolveTemplate(business.template);
+---
+
+<BusinessView {...Astro.props} />

@@ -1,0 +1,80 @@
+---
+import type { Business } from '@/lib/business';
+import { getBusinessStyles } from '@/lib/styles';
+import Layout from '@/layouts/Layout.astro';
+import { id, styles } from './index.ts';
+import './tokens.css';
+
+interface Props {
+  slug: string;
+  business: Business;
+  documentPaths: string[];
+}
+
+const { slug, business, documentPaths } = Astro.props;
+
+// El template es el piso de la cascada; el JSON del negocio pisa encima.
+const styleVars = getBusinessStyles(styles, business.styles);
+---
+
+<Layout title={business.name} template={id} styleVars={styleVars}>
+  <main
+    class="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col gap-menu bg-background px-pastel-gutter pb-pastel-xl"
+  >
+    <header class="flex flex-col items-center gap-pastel-sm pt-pastel-xl text-center">
+      {
+        business.logo && (
+          <img
+            src={business.logo}
+            alt=""
+            width="96"
+            height="96"
+            class="size-24 rounded-pastel-full border-4 border-surface object-cover shadow-pastel-1"
+          />
+        )
+      }
+      <h1 class="font-display text-3xl font-bold text-ink">{business.name}</h1>
+      {business.description && <p class="text-menu text-muted">{business.description}</p>}
+    </header>
+
+    {
+      business.isActive && (
+        <p class="self-center rounded-pastel-full bg-secondary-container px-pastel-md py-pastel-xs text-sm font-bold text-on-secondary-container">
+          Abierto ahora
+        </p>
+      )
+    }
+
+    <nav class="flex flex-col gap-pastel-md">
+      {
+        documentPaths.map((docPath) => (
+          <a
+            href={`/${slug}/${docPath}`}
+            class="flex min-h-14 items-center justify-between rounded-pastel-full bg-surface px-pastel-lg text-menu font-semibold text-ink shadow-pastel-1 hover:shadow-pastel-2 active:translate-y-0.5 active:shadow-pastel-pressed"
+          >
+            {docPath}
+            <span aria-hidden="true" class="text-accent">
+              ›
+            </span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <footer
+      class="mt-auto flex flex-wrap items-center justify-center gap-pastel-sm bg-glass px-pastel-gutter pt-pastel-sm pb-pastel-sm backdrop-blur-glass"
+    >
+      {
+        business.socialLinks.map((link) => (
+          <a
+            href={link.url}
+            rel="noopener noreferrer"
+            class="flex size-11 items-center justify-center rounded-pastel-full bg-secondary-container/20 text-sm font-bold text-accent"
+          >
+            {link.label ?? link.platform}
+          </a>
+        ))
+      }
+    </footer>
+  </main>
+</Layout>

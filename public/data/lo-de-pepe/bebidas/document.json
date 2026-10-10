@@ -1,0 +1,7 @@
+{
+  "title": "Bebidas",
+  "status": "draft",
+  "pages": ["./pages/01.webp", "./pages/02.webp", "./pages/03.webp"],
+  "template": "pastel-link-hub",
+  "styles": { "colors": { "accent": "#2f6f4e" } }
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Platos Principales",
+  "description": "Solo al mediodía y a la noche.",
+  "status": "published",
+  "pages": ["./pages/01.webp", "./pages/02.webp"],
+  "styles": {
+    "colors": {
+      "background": "#f6f4ef",
+      "surface": "#ffffff",
+      "text": "#1a1a1a",
+      "textMuted": "#6b6b6b",
+      "accent": "#9a6b32",
+      "border": "#e0dcd2"
+    },
+    "spacing": { "gap": 28, "padding": 32, "radius": 16 }
+  }
+}

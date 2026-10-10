@@ -1,0 +1,197 @@
+@import "tailwindcss";
+
+/* Quicksand self-hosted (OFL, ver public/fonts/Quicksand/OFL.txt).
+   El eje wght va de 300 a 700, así que un solo archivo por familia cubre los
+   pesos 500, 600 y 700 que pide DESIGN.md. Comfortaa va de 300 a 700 con
+   default 400. Ambas van DESPUÉS del @import: la spec exige que todos los
+   @import precedan a cualquier otra regla. */
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/fonts/Comfortaa/Comfortaa-VariableFont_wght.ttf') format('truetype');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/**
+ * Tokens del tema. `inline` es lo que hace que esto funcione con temas por
+ * negocio: la utility class usa el VALOR de la variable en vez de referenciar
+ * la del theme, así que resuelve contra lo que la página inyectó.
+ *
+ * Sin `inline`, `bg-surface` compila a `var(--color-surface)` y resuelve donde
+ * se DEFINIÓ --color-surface (:root), no donde se sobreescribió. Con inline
+ * compila a `var(--surface)` y resuelve contra el <html> de la página.
+ *
+ * Este bloque es la UNIÓN de los tokens que cualquier template puede usar:
+ * los 6 del schema editable + los exclusivos de templates. Cada token
+ * exclusivo lleva fallback en el var() porque no todos los templates lo
+ * declaran — sin fallback, `var(--pastel-secondary)` sin definir deja la
+ * declaración inválida en tiempo de valor computado y la home pierde el
+ * background. Los 6 del schema NO llevan fallback a propósito: Layout.astro
+ * los inyecta siempre, y un fallback ahí escondería un token que faltó.
+ *
+ * Los defaults son los de BASE_STYLES (src/lib/styles.ts), derivados del
+ * frontmatter de DESIGN.md. Los JSON los sobreescriben por negocio y por menú.
+ */
+@theme inline {
+  /* Colores del schema: bg-surface, text-accent, border-border */
+  --color-background: var(--surface-background);
+  --color-surface: var(--surface-surface);
+  --color-ink: var(--surface-ink);
+  --color-muted: var(--surface-muted);
+  --color-accent: var(--surface-accent);
+  --color-border: var(--surface-border);
+  --color-on-accent: var(--pastel-on-accent, #ffffff);
+
+  /* Roles de color de templates. secondary #006a65 / tertiary #785a00 y sus
+     pares on-*, del frontmatter de DESIGN.md. */
+  --color-secondary: var(--pastel-secondary, #006a65);
+  --color-on-secondary: var(--pastel-on-secondary, #ffffff);
+  --color-secondary-container: var(--pastel-secondary-container, #79f3ea);
+  --color-on-secondary-container: var(--pastel-on-secondary-container, #006f69);
+  --color-tertiary: var(--pastel-tertiary, #785a00);
+  --color-on-tertiary: var(--pastel-on-tertiary, #ffffff);
+  --color-tertiary-container: var(--pastel-tertiary-container, #cfa53f);
+  --color-on-tertiary-container: var(--pastel-on-tertiary-container, #513c00);
+
+  /* Rampa de contenedores del frontmatter. Sirve para apilar superficies:
+     `bg-container-low` sobre `bg-container` sobre `bg-container-high`. */
+  --color-container-lowest: var(--pastel-container-lowest, #ffffff);
+  --color-container-low: var(--pastel-container-low, #f8f2ef);
+  --color-container: var(--pastel-container, #f3ede9);
+  --color-container-high: var(--pastel-container-high, #ede7e3);
+  --color-container-highest: var(--pastel-container-highest, #e7e1de);
+
+  /* Tipografía: font-menu, font-heading, font-display */
+  --font-menu: var(--type-font);
+  --font-heading: var(--type-font);
+
+  /* Comfortaa para titulares, según DESIGN.md. Antes era un literal en un
+     `@theme` aparte, o sea global: cambiarlo era cambiar el tema entero. Ahora
+     el template lo declara en su tokens.css y el var() es la costura. */
+  --font-display: var(
+    --type-font-display,
+    'Comfortaa',
+    'Quicksand',
+    ui-rounded,
+    system-ui,
+    sans-serif
+  );
+
+  /* Pesos: font-heading no aplica a weight; se usan las de Tailwind */
+  --font-weight-heading: var(--type-weight-heading);
+  --font-weight-body: var(--type-weight-body);
+
+  /* Ritmo: rounded-menu. El padding y el gap NO salen del namespace
+     `--spacing-*` — están declarados como @utility más abajo, en este mismo
+     archivo. La razón está ahí. */
+  --radius-menu: var(--space-radius);
+
+  /* Escalas de templates. Los valores literales son solo el fallback para las
+     páginas sin ese template; el color real sale de su tokens.css. */
+  --spacing-pastel-xs: var(--pastel-space-xs, 0.25rem);
+  --spacing-pastel-sm: var(--pastel-space-sm, 0.5rem);
+  --spacing-pastel-md: var(--pastel-space-md, 0.875rem);
+  --spacing-pastel-lg: var(--pastel-space-lg, 1.25rem);
+  --spacing-pastel-xl: var(--pastel-space-xl, 2rem);
+  --spacing-pastel-gutter: var(--pastel-gutter, 1rem);
+  --spacing-pastel-margin: var(--pastel-margin, 1.25rem);
+
+  --radius-pastel-sm: var(--pastel-radius-sm, 0.5rem);
+  --radius-pastel: var(--pastel-radius, 1rem);
+  --radius-pastel-md: var(--pastel-radius-md, 1.5rem);
+  --radius-pastel-lg: var(--pastel-radius-lg, 2rem);
+  --radius-pastel-xl: var(--pastel-radius-xl, 3rem);
+  --radius-pastel-full: var(--pastel-radius-full, 9999px);
+
+  /* Elevation de templates: sombras teñidas de pastel, no grises.
+     shadow-pastel-1 para lo interactivo, shadow-pastel-2 para lo destacado y
+     shadow-pastel-pressed para el estado :active (compressed, como una gomita). */
+  --shadow-pastel-1: var(
+    --pastel-shadow-1,
+    0 8px 24px -4px rgba(255, 133, 161, 0.14),
+    0 2px 6px 0 rgba(61, 46, 57, 0.04)
+  );
+  --shadow-pastel-2: var(
+    --pastel-shadow-2,
+    0 14px 32px -6px rgba(255, 133, 161, 0.22),
+    0 4px 10px 0 rgba(61, 46, 57, 0.06)
+  );
+  --shadow-pastel-pressed: var(--pastel-shadow-pressed, 0 2px 8px rgba(61, 46, 57, 0.08));
+
+  /* Vidrio para barras sticky: bg-glass + backdrop-blur-glass. El `--blur-*`
+     es el namespace del que salen `blur-*` y `backdrop-blur-*` en Tailwind. */
+  --color-glass: var(--pastel-glass, rgba(255, 249, 245, 0.85));
+  --blur-glass: var(--pastel-glass-blur, 16px);
+
+  /* Imagen de fondo: bg-backdrop */
+  --backdrop-image: var(--backdrop);
+}
+
+@layer base {
+  /* Esto antes no pintaba NADA: los tokens estaban en un <div> interno y las
+     custom properties heredan hacia abajo, nunca hacia arriba. `<html>` no
+     podía ver los tokens de su descendiente. Ahora Layout.astro los inyecta
+     en el `style` del propio <html> y estas reglas resuelven de verdad. */
+  html {
+    background-color: var(--surface-background);
+    color: var(--surface-ink);
+    font-family: var(--type-font);
+    font-weight: var(--type-weight-body);
+  }
+
+  /* img y figure no respetan el font-weight del body por defecto */
+  img {
+    font-weight: inherit;
+  }
+}
+
+@utility backdrop {
+  background-image: var(--backdrop-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Padding y gap, declarados uno por uno en vez de salir del namespace
+   `--spacing-*`.
+
+   El problema del namespace: `--spacing-<clave>` no es "la clave del gap", es
+   el namespace del que salen TODAS las utilities de espaciado de esa clave —
+   `p-*`, `px-*`, `m-*`, `gap-*`, `space-x-*`. Una clave genera la familia
+   entera con el mismo valor, así que si el padding y el gap comparten clave,
+   `p-menu` y `gap-menu` leen lo mismo y una de las dos miente en silencio:
+   compila, renderiza, y el espaciado es el que no pediste.
+
+   Con @utility no hay familia: se declara exactamente la utility que existe.
+   `p-menu` es padding y `gap-menu` es gap, y no hay `m-menu`, `px-menu` ni
+   `gap-gap` flotando para que alguien las use por error.
+
+   Sólo funciona en el CSS de entrada, no en el tokens.css de un template. */
+@utility p-menu {
+  padding: var(--space-padding);
+}
+
+@utility gap-menu {
+  gap: var(--space-gap);
+}
+
+/* Los templates pueden usar scale para agrandar o achicar su base tipográfica.
+   Es una variable custom, no un token de Tailwind: no hay utility que la use
+   sola, la consumen las clases de cada template.
+
+   Ojo: `font-heading` sigue apuntando a `--type-font` (Quicksand), y
+   `--font-weight-heading` compite con él por el mismo nombre. Eso NO se tocó,
+   es una decisión fuera del alcance de este refactor. Para titulares usá
+   `font-display`, no `font-heading`. */
+@theme {
+  --text-menu: calc(1rem * var(--type-scale));
+}

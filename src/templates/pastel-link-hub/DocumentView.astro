@@ -1,0 +1,59 @@
+---
+import type { Business } from '@/lib/business';
+import type { Document } from '@/lib/document';
+import { getBusinessStyles } from '@/lib/styles';
+import Layout from '@/layouts/Layout.astro';
+import { id, styles } from './index.ts';
+import './tokens.css';
+
+interface Props {
+  slug: string;
+  documentSlug: string;
+  business: Business;
+  document: Document;
+}
+
+const { slug, documentSlug, business, document } = Astro.props;
+
+/**
+ * `document.pages` guarda rutas relativas AL ARCHIVO (`./pages/01.webp`), que es
+ * lo correcto para un JSON portable entre máquinas. El navegador no sabe eso:
+ * resolves contra la URL actual y `./pages/01.webp` en `/lo-de-pepe/bebidas`
+ * pide `/lo-de-pepe/pages/01.webp`, que da 404. Hay que prefijar el path real
+ * de `public/data`.
+ */
+const pageUrl = (page: string) => `/data/${slug}/${documentSlug}/${page.replace(/^\.\//, '')}`;
+
+// Tres niveles: template → business.json → document.json. Por eso el accent
+// verde de bebidas sobrevive aunque el negocio no diga nada.
+const styleVars = getBusinessStyles(styles, business.styles, document.styles);
+---
+
+<Layout title={`${document.title} — ${business.name}`} template={id} styleVars={styleVars}>
+  <main
+    class="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col gap-menu bg-background px-pastel-gutter pb-pastel-xl"
+  >
+    <header class="flex flex-col items-center gap-pastel-sm pt-pastel-xl text-center">
+      <a href={`/${slug}`} class="text-menu font-semibold text-accent">
+        ← {business.name}
+      </a>
+      <h1 class="font-display text-3xl font-bold text-ink">{document.title}</h1>
+      {document.description && <p class="text-menu text-muted">{document.description}</p>}
+    </header>
+
+    <ol class="flex flex-col gap-pastel-lg">
+      {
+        document.pages.map((page) => (
+          <li>
+            <img
+              src={pageUrl(page)}
+              alt=""
+              loading="lazy"
+              class="w-full rounded-pastel-lg border border-border bg-surface shadow-pastel-1"
+            />
+          </li>
+        ))
+      }
+    </ol>
+  </main>
+</Layout>

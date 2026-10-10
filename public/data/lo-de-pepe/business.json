@@ -1,0 +1,16 @@
+{
+  "name": "Lo de Pepe",
+  "description": "Cocina de barrio desde 1998. Masa con manteca, horno de leña.",
+  "address": "Av. Corrientes 3845, Buenos Aires",
+  "phone": "+54 11 4855-2200",
+  "email": "hola@lodopepe.ar",
+  "website": "lodopepe.ar",
+  "isActive": true,
+  "template": "pastel-link-hub",
+  "socialLinks": [
+    { "platform": "instagram", "url": "https://instagram.com/lodopepe", "label": "Seguinos" },
+    { "platform": "whatsapp", "url": "https://wa.me/5491148552200" },
+    { "platform": "tripadvisor", "url": "https://tripadvisor.com/restaurant/lo-de-pepe" }
+  ],
+  "styles": {}
+}

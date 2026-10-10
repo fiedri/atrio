@@ -1,0 +1,36 @@
+---
+import "@/styles/global.css";
+import { getBusinessStyles } from "@/lib/styles";
+
+interface Props {
+  title?: string;
+  /** `data-template` de <html>. El tokens.css del template lo usa de selector. */
+  template?: string;
+  /** Custom properties ya resueltas por la vista del template. */
+  styleVars?: Record<string, string>;
+}
+
+const { title = "Verve", template, styleVars } = Astro.props;
+
+// Los tokens van en el `style` de <html> y no en un <div> interno porque las
+// custom properties heredan HACIA ABAJO: un <html> nunca ve las de su
+// descendiente, y `@layer base { html { background-color: var(--surface-…)} }`
+// quedaba sin resolver. Siempre se inyecta, aun sin styleVars: la home no
+// tiene template pero sí necesita el piso de BASE_STYLES.
+const styles = styleVars ?? getBusinessStyles();
+---
+
+<!doctype html>
+<html lang="es" data-template={template} style={styles}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

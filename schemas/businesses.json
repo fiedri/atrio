@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://verve.local/schemas/business.json",
+  "title": "Business",
+  "description": "Un negocio. El archivo vive en public/menus/{slug}/business.json. El slug es el nombre de la carpeta, no se repite acá.",
+  "type": "object",
+  "required": ["name", "template", "socialLinks"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Nombre del negocio. Ej: \"Lo de Pepe\""
+    },
+    "description": {
+      "type": "string",
+      "description": "Descripción corta, opcional. Ej: \"Cocina de barrio desde 1998\""
+    },
+    "address": {
+      "type": "string",
+      "description": "Dirección física."
+    },
+    "phone": {
+      "type": "string",
+      "description": "Teléfono. Siempre texto, aunque sea puramente numérico: el +54 y los guiones son parte del dato."
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email de contacto."
+    },
+    "website": {
+      "type": "string",
+      "description": "Sitio web, sin https:// — el frontend lo agrega."
+    },
+    "logo": {
+      "type": "string",
+      "description": "Ruta relativa al business.json. Ej: \"./logo.webp\""
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "false oculta el negocio y todos sus menús sin borrar nada."
+    },
+    "template": {
+      "type": "string",
+      "enum": ["editorial", "grid", "gallery", "pastel-link-hub"],
+      "description": "Plantilla de presentación del negocio. Cada valor corresponde a una carpeta en src/templates/. \"pastel-link-hub\" es la única implementada; los otros tres son stubs y el build falla si un JSON publicado los usa. Sin valor no hay defaults: el campo es obligatorio."
+    },
+    "socialLinks": {
+      "type": "array",
+      "description": "Redes del negocio. Un array y no un objeto de claves fijas, para poder repetir plataforma, ordenarlos y etiquetarlos.",
+      "items": {
+        "type": "object",
+        "required": ["platform", "url"],
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "instagram",
+              "facebook",
+              "tiktok",
+              "whatsapp",
+              "web",
+              "tripadvisor",
+              "delivery"
+            ],
+            "description": "Plataforma. Para agregar una, editá este enum."
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "description": "URL completa. Ej: \"https://instagram.com/lodopepe\""
+          },
+          "label": {
+            "type": "string",
+            "description": "Texto del botón. Si no se declara, el frontend usa el nombre de la plataforma."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "styles": {
+      "$ref": "#/$defs/stylesOverride",
+      "description": "Tema base del negocio. Todo opcional: lo que no declares se resuelve con los defaults del frontend (BASE_STYLES, src/lib/styles.ts) o con los tokens del template. Solo declara lo que sobreescribas — no copies el bloque completo."
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stylesOverride": {
+      "type": "object",
+      "description": "Tema base del negocio. Todo opcional: lo que no declares se resuelve con los defaults del frontend (BASE_STYLES, src/lib/styles.ts) o con los tokens del template. Solo declara lo que sobreescribas — no copies el bloque completo.",
+      "properties": {
+        "colors": {
+          "type": "object",
+          "description": "Paleta del tema. Solo declara los colores que sobreescribas.",
+          "properties": {
+            "background": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Fondo de la página. Por defecto #fef8f4"
+            },
+            "surface": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Fondo de las tarjetas. Por defecto #ffffff"
+            },
+            "text": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Texto principal. Por defecto #1d1b19"
+            },
+            "textMuted": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Texto secundario. Por defecto #554245"
+            },
+            "accent": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Precios, íconos, enlaces. Por defecto #a03b56"
+            },
+            "border": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Bordes y separadores. Por defecto #dbc0c4"
+            }
+          },
+          "additionalProperties": false
+        },
+        "typography": {
+          "type": "object",
+          "description": "Fuentes y escala tipográfica.",
+          "properties": {
+            "fontFamily": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "description": "Stack CSS con fallbacks. Por defecto \"'Quicksand', system-ui, -apple-system, 'Segoe UI', sans-serif\""
+            },
+            "headingWeight": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 900,
+              "description": "Peso de los títulos. Por defecto 700"
+            },
+            "bodyWeight": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 900,
+              "description": "Peso del cuerpo. Por defecto 500"
+            },
+            "scale": {
+              "type": "number",
+              "minimum": 0.5,
+              "maximum": 3,
+              "description": "Multiplicador del tamaño base. Por defecto 1"
+            }
+          },
+          "additionalProperties": false
+        },
+        "spacing": {
+          "type": "object",
+          "description": "Ritmo del layout, en píxeles.",
+          "properties": {
+            "gap": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 64,
+              "description": "Separación entre elementos. Por defecto 20"
+            },
+            "padding": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 64,
+              "description": "Padding de las tarjetas. Por defecto 16"
+            },
+            "radius": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 64,
+              "description": "Radio de las esquinas. Por defecto 28"
+            }
+          },
+          "additionalProperties": false
+        },
+        "background": {
+          "type": "object",
+          "description": "Imagen o video de fondo, con rutas relativas al business.json.",
+          "properties": {
+            "image": { "type": "string", "description": "Ej: \"./bg.webp\"" },
+            "video": { "type": "string", "description": "Se reproduce en loop, muted y autoplay." },
+            "videoPoster": {
+              "type": "string",
+              "description": "Poster del video. Obligatorio si hay video: sin esto hay un flash negro mientras carga en móvil."
+            }
+          },
+          "additionalProperties": false,
+          "dependencies": { "videoPoster": ["video"] }
+        }
+      },
+      "additionalProperties": false
+    },
+    "hexColor": {
+      "type": "string",
+      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+      "description": "Color hexadecimal, corto (#fff) o largo (#ffffff)."
+    }
+  }
+}

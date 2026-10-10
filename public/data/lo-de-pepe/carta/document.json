@@ -1,0 +1,6 @@
+{
+  "title": "La Carta",
+  "description": "Todos los días de 12 a 23hs. Almuerzo hasta 15:30.",
+  "status": "published",
+  "pages": ["./pages/01.webp", "./pages/02.webp", "./pages/03.webp", "./pages/04.webp"]
+}

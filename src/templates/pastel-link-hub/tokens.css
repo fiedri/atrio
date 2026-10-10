@@ -1,0 +1,89 @@
+/* Tokens que son EXCLUSIVOS del template pastel-link-hub.
+ *
+ * Archivo .css plano y no un <style> de Astro a propósito: Astro le agrega
+ * `data-astro-cid-*` a los <style> con scope, y un selector `html[data-…]`
+ * con ese atributo nunca matchea nada. Un import de CSS plano pasa por Vite
+ * tal cual, así que la regla llega a la hoja sin scope.
+ *
+ * Y acá NO va `@utility`: este archivo no es la entrada de Tailwind
+ * (`@import "tailwindcss"` vive en global.css) y verificado en dev, un
+ * `@utility` acá no se compila — llega crudo al navegador, que lo ignora en
+ * silencio. Las utilities del template se generan desde `@theme inline` de
+ * global.css; este archivo solo declara los custom properties.
+ *
+ * El prefijo `--pastel-` (más `--type-font-display`) marca la frontera del
+ * INVARIANTE de nombres reservados de BASE_STYLES: nada de lo que hay abajo
+ * puede aparecer en el objeto `styles` de index.ts ni en un JSON de negocio,
+ * porque el `style` inline de <html> le gana a este bloque por especificidad
+ * y el token se perdería en silencio.
+ *
+ * `html[data-template="pastel-link-hub"]` pesa (0,1,1) contra `:root` (0,1,0),
+ * así que el nivel template le gana al nivel global si algún día coinciden.
+ * Contra el style inline (1,0,0,0) no puede ganar: por eso acá no se
+ * re-declara ningún token del schema de 6 colores. */
+
+html[data-template='pastel-link-hub'] {
+  /* Roles de color. La prosa de DESIGN.md los llama secondary/tiary, el
+     frontmatter los llama secondary/tertiary: gana el frontmatter, que es el
+     que tiene los hex. */
+  --pastel-secondary: #006a65;
+  --pastel-on-secondary: #ffffff;
+  --pastel-secondary-container: #79f3ea;
+  --pastel-on-secondary-container: #006f69;
+
+  --pastel-tertiary: #785a00;
+  --pastel-on-tertiary: #ffffff;
+  --pastel-tertiary-container: #cfa53f;
+  --pastel-on-tertiary-container: #513c00;
+
+  /* `on-accent` sale de on-primary: es el texto que va sobre el color de
+     marca. Los botones pill lo necesitan para no ser gris sobre rosa. */
+  --pastel-on-accent: #ffffff;
+
+  /* Rampa de contenedores: cinco pasos de blanco a hueso. El canvas usa el
+     `--surface-background` del schema; esto es para las superficies que se
+     superponen entre sí. */
+  --pastel-container-lowest: #ffffff;
+  --pastel-container-low: #f8f2ef;
+  --pastel-container: #f3ede9;
+  --pastel-container-high: #ede7e3;
+  --pastel-container-highest: #e7e1de;
+
+  /* Comfortaa para titulares y landmarks; Quicksand para cuerpo y labels.
+     Es la costura mínima para que la segunda familia exista sin ampliar el
+     schema, que expone una sola `fontFamily` por negocio. */
+  --type-font-display: 'Comfortaa', 'Quicksand', ui-rounded, system-ui, sans-serif;
+
+  /* Escala de radios: pillowy y geométrica. `full` son las píldoras de botones. */
+  --pastel-radius-sm: 0.5rem;
+  --pastel-radius: 1rem;
+  --pastel-radius-md: 1.5rem;
+  --pastel-radius-lg: 2rem;
+  --pastel-radius-xl: 3rem;
+  --pastel-radius-full: 9999px;
+
+  /* Escala de espaciado. `gap`/`padding`/`radius` del schema siguen siendo la
+     medida de layout de la página; esto es el ritmo interno de cada bloque. */
+  --pastel-gutter: 1rem;
+  --pastel-gutter-mobile: 0.75rem;
+  --pastel-margin: 1.25rem;
+  --pastel-margin-mobile: 1rem;
+  --pastel-space-xs: 0.25rem;
+  --pastel-space-sm: 0.5rem;
+  --pastel-space-md: 0.875rem;
+  --pastel-space-lg: 1.25rem;
+  --pastel-space-xl: 2rem;
+
+  /* Elevation. Sombras teñidas de pastel, no grises: la profundidad se siente
+     cálida y el botón se comporta como una gomita. */
+  --pastel-shadow-1: 0 8px 24px -4px rgba(255, 133, 161, 0.14),
+    0 2px 6px 0 rgba(61, 46, 57, 0.04);
+  --pastel-shadow-2: 0 14px 32px -6px rgba(255, 133, 161, 0.22),
+    0 4px 10px 0 rgba(61, 46, 57, 0.06);
+  --pastel-shadow-pressed: 0 2px 8px rgba(61, 46, 57, 0.08);
+
+  /* Vidrio para barras sticky. El blur va acá y no en la regla que lo usa
+     para que el componente no tenga que acordarse del número. */
+  --pastel-glass: rgba(255, 249, 245, 0.85);
+  --pastel-glass-blur: 16px;
+}
