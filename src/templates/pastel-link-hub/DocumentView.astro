@@ -1,11 +1,13 @@
 ---
 import type { Business } from '@/lib/business';
 import type { Document } from '@/lib/document';
-import { getBusinessStyles } from '@/lib/styles';
+import { getBusinessBackground, getBusinessStyles } from '@/lib/styles';
 import Layout from '@/layouts/Layout.astro';
 import { id, styles } from './index.ts';
 import './tokens.css';
-
+import FlipBook from '@/components/flipBook.svelte';
+import { Icon } from 'astro-icon/components';
+import {badgeStyle} from '@/lib/babgeStyle';
 interface Props {
   slug: string;
   documentSlug: string;
@@ -15,45 +17,122 @@ interface Props {
 
 const { slug, documentSlug, business, document } = Astro.props;
 
-/**
- * `document.pages` guarda rutas relativas AL ARCHIVO (`./pages/01.webp`), que es
- * lo correcto para un JSON portable entre máquinas. El navegador no sabe eso:
- * resolves contra la URL actual y `./pages/01.webp` en `/lo-de-pepe/bebidas`
- * pide `/lo-de-pepe/pages/01.webp`, que da 404. Hay que prefijar el path real
- * de `public/data`.
- */
 const pageUrl = (page: string) => `/data/${slug}/${documentSlug}/${page.replace(/^\.\//, '')}`;
 
-// Tres niveles: template → business.json → document.json. Por eso el accent
-// verde de bebidas sobrevive aunque el negocio no diga nada.
 const styleVars = getBusinessStyles(styles, business.styles, document.styles);
+const backdrop = getBusinessBackground(styles, business.styles, document.styles);
+
+const hasProfile = business.showProfile !== false;
 ---
 
 <Layout title={`${document.title} — ${business.name}`} template={id} styleVars={styleVars}>
+  {
+    backdrop.video && (
+      <video
+        class="fixed inset-0 -z-10 h-full w-full object-cover"
+        src={backdrop.video}
+        poster={backdrop.videoPoster}
+        autoplay
+        muted
+        loop
+        playsinline
+        aria-hidden="true"
+      />
+    )
+  }
   <main
-    class="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col gap-menu bg-background px-pastel-gutter pb-pastel-xl"
+    class="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col bg-background px-1"
   >
-    <header class="flex flex-col items-center gap-pastel-sm pt-pastel-xl text-center">
-      <a href={`/${slug}`} class="text-menu font-semibold text-accent">
-        ← {business.name}
-      </a>
-      <h1 class="font-display text-3xl font-bold text-ink">{document.title}</h1>
-      {document.description && <p class="text-menu text-muted">{document.description}</p>}
+    <header class="flex flex-row pt-3 px-3 gap-2 items-center justify-between mr-2.5">
+      <div class="flex gap-3 items-center">
+        {
+        hasProfile && (
+          <a
+            href={`/${slug}`}
+            aria-label={`Volver a ${business.name}`}
+            class="grid size-10 shrink-0 place-items-center rounded-pastel-full text-ink transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"
+                aria-hidden="true">
+              <path d="M15 4l-8 8 8 8" />
+            </svg>
+          </a>
+        )
+      }
+      {
+        document.icon && (
+          <span
+            style={badgeStyle({
+              slug: documentSlug,
+              title: document.title,
+              icon: document.icon,
+              background: document.background,
+              pageCount: document.pages?.length ?? 0,
+            }, 0)}
+            class="bg-badge grid size-10 shrink-0 place-items-center rounded-2xl"
+          >
+            <Icon name={document.icon} class="size-5" />
+          </span>
+        )
+      }
+      <div class="flex flex-col p-2 gap-0.5">
+        <h1 class="font-display text-lg font-black text-ink leading-none">{business.name}</h1>
+      <span class="text-sm text-muted leading-none">{document.title}</span>
+      </div>
+      </div>
+            {
+        business.logo &&  (
+          hasProfile ?
+          <a href={`/${slug}`}>
+            <img
+            src={business.logo}
+            alt=""
+            class="size-11 rounded-pastel-full border border-surface object-cover shadow-pastel-2"
+          />
+          </a>:
+          <div class="relative mr-2">
+            <img
+            src={business.logo}
+            alt=""
+            class="size-11 rounded-pastel-full border border-surface object-cover shadow-pastel-2"
+          />
+             {/* <div class="bg-secondary-container text-secondary absolute -bottom-1 -right-2 p-1 rounded-full">
+            <Icon name="codicon:verified-filled" class={`text-sm`} />
+          </div>*/}
+          </div>
+          
+        )
+      }
     </header>
 
-    <ol class="flex flex-col gap-pastel-lg">
-      {
-        document.pages.map((page) => (
-          <li>
-            <img
-              src={pageUrl(page)}
-              alt=""
-              loading="lazy"
-              class="w-full rounded-pastel-lg border border-border bg-surface shadow-pastel-1"
-            />
-          </li>
-        ))
-      }
-    </ol>
+    {
+      document.description && (
+        <p class="px-4 py-1 text-center text-menu text-muted">
+          {document.description}
+        </p>
+      )
+    }
+
+    <div class="px-5 justify-center items-center">
+      <FlipBook images={document.pages.map((page) => pageUrl(page))} client:only="svelte" />
+    </div>
+
+    <noscript>
+      <ol class="flex flex-col gap-pastel-lg">
+        {
+          document.pages.map((page) => (
+            <li>
+              <img
+                src={pageUrl(page)}
+                alt=""
+                loading="lazy"
+                class="w-full rounded-pastel-lg border border-border bg-surface shadow-pastel-1"
+              />
+            </li>
+          ))
+        }
+      </ol>
+    </noscript>
   </main>
 </Layout>

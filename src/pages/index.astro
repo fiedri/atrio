@@ -2,8 +2,84 @@
 import Layout from '@/layouts/Layout.astro';
 ---
 
-{/* La home no tiene template: no pasa `template` ni `styleVars`, y Layout
-    inyecta BASE_STYLES. Su propio diseño entra más adelante. */}
-<Layout title="Verve">
-  <h1>Próximamente</h1>
+<Layout title="Verve" platform="verve">
+  <div class="relative flex min-h-dvh flex-col overflow-hidden bg-background">
+    <div class="halo pointer-events-none absolute inset-0" aria-hidden="true"></div>
+
+    <header class="relative z-10 flex items-center justify-between px-6 py-6 sm:px-10">
+      <a
+        href="/"
+        class="font-display text-lg font-extrabold tracking-[-0.02em] text-ink transition-colors hover:text-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        Verve<span class="text-secondary">.</span>
+      </a>
+      <span class="text-sm text-muted">ROOT studio</span>
+    </header>
+
+    <main class="relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-16 text-center">
+      <p class="inline-flex items-center gap-2.5 rounded-pastel-full border border-container-high bg-container-low px-4 py-1.5 text-sm font-semibold text-accent">
+        <span class="status-dot size-2 rounded-pastel-full bg-secondary" aria-hidden="true"></span>
+        Próximamente
+      </p>
+
+      <h1 class="mt-8 font-display font-extrabold leading-none tracking-[-0.04em] text-ink text-[clamp(4rem,14vw,7.5rem)]">
+        Verve<span class="text-secondary">.</span>
+      </h1>
+
+      <p class="mx-auto mt-7 max-w-[34rem] text-base leading-relaxed text-muted sm:text-lg">
+        Catálogos y menús digitales para comercios locales. Sin cuentas, sin cookies,
+        a máxima velocidad.
+      </p>
+    </main>
+
+    <footer class="relative z-10 px-6 pb-8 sm:px-10">
+      <div class="mx-auto flex max-w-4xl flex-col items-center justify-between gap-3 border-t border-container-high pt-6 text-sm text-muted sm:flex-row">
+        <p>Desarrollado por ROOT studio</p>
+        <nav class="flex items-center gap-6" aria-label="Páginas legales">
+          <a
+            href="/privacity"
+            class="font-medium text-accent underline decoration-container-high underline-offset-4 transition-colors hover:text-secondary hover:decoration-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            Privacidad
+          </a>
+          <a
+            href="/terms"
+            class="font-medium text-accent underline decoration-container-high underline-offset-4 transition-colors hover:text-secondary hover:decoration-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            Términos y Condiciones
+          </a>
+        </nav>
+      </div>
+    </footer>
+  </div>
 </Layout>
+
+<style>
+  .halo {
+    background: radial-gradient(
+      55% 42% at 50% 0%,
+      rgb(226 231 255 / 0.75),
+      transparent 72%
+    );
+  }
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .status-dot {
+    animation: pulse-dot 2.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .status-dot {
+      animation: none;
+    }
+  }
+</style>

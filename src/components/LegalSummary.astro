@@ -1,0 +1,36 @@
+---
+interface Props {
+  points: string[];
+  title?: string;
+}
+
+const { points, title = 'Lo esencial' } = Astro.props;
+---
+
+<section
+  class="mt-10 rounded-pastel-lg border border-container-high bg-container-low p-6 sm:p-7"
+  aria-label={title}
+>
+  <p class="font-display text-[0.8125rem] font-bold tracking-[0.02em] text-accent">{title}</p>
+  <ul class="mt-4 flex flex-col gap-3">
+    {
+      points.map((point) => (
+        <li class="flex items-start gap-3 text-[0.9375rem] leading-[1.6] text-ink">
+          <svg
+            class="mt-1 size-4 shrink-0 text-secondary"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 12.5l5 5 11-11" />
+          </svg>
+          <span>{point}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>

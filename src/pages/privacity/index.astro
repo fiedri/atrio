@@ -1,0 +1,57 @@
+---
+import Legal from '@/layouts/Legal.astro';
+import LegalSection from '@/components/LegalSection.astro';
+import LegalSummary from '@/components/LegalSummary.astro';
+---
+
+<Legal
+  docTitle="Política de Privacidad"
+  lede="Verve muestra catálogos y perfiles digitales de comercios locales. Esta política explica cómo lo hacemos y, sobre todo, qué no hacemos con tu información."
+  updated="Última actualización: octubre de 2026"
+  siblingHref="/terms"
+  siblingLabel="Ver Términos y Condiciones"
+>
+  <p>
+    En Verve (desarrollado y gestionado por ROOT studio), respetamos profundamente la privacidad de nuestros usuarios y de los clientes que visitan los perfiles y catálogos digitales de nuestros comercios aliados.
+  </p>
+
+  <LegalSummary
+    points={[
+      'No usamos cookies analíticas, de rastreo comercial ni de publicidad.',
+      'No pedimos que crees una cuenta ni que inicies sesión.',
+      'No recopilamos tu nombre, correo ni teléfono.',
+    ]}
+  />
+
+  <div class="mt-12 flex flex-col gap-8">
+    <LegalSection id="no-recopilamos" number="01" heading="Información que no recopilamos">
+      <p>Verve es una plataforma de contenido estático optimizada para la máxima velocidad.</p>
+      <p>
+        <strong class="font-semibold text-ink">Sin cookies de rastreo:</strong>
+        no utilizamos cookies analíticas, de rastreo comercial ni de publicidad de terceros.
+      </p>
+      <p>
+        <strong class="font-semibold text-ink">Sin registro de usuarios:</strong>
+        los visitantes no necesitan crear una cuenta, iniciar sesión ni proporcionar datos personales (como nombre, correo o teléfono) para visualizar los catálogos o menús.
+      </p>
+    </LegalSection>
+
+    <LegalSection id="enlaces-a-terceros" number="02" heading="Enlaces a terceros (WhatsApp y redes sociales)">
+      <p>
+        Nuestros perfiles digitales pueden contener botones de acción directa a plataformas externas como WhatsApp, Instagram o llamadas telefónicas. Al hacer clic en estos enlaces, el usuario interactúa directamente con el comercio o la plataforma correspondiente bajo sus propias políticas de privacidad.
+      </p>
+    </LegalSection>
+
+    <LegalSection id="infraestructura" number="03" heading="Infraestructura y seguridad">
+      <p>
+        La plataforma se aloja en redes de distribución de contenido (CDN) globales de alta velocidad para garantizar la disponibilidad del servicio y la protección contra accesos no autorizados.
+      </p>
+    </LegalSection>
+
+    <LegalSection id="contacto" number="04" heading="Contacto">
+      <p>
+        Para cualquier duda o consulta sobre el funcionamiento técnico de la plataforma, puedes contactar a la agencia responsable: ROOT studio.
+      </p>
+    </LegalSection>
+  </div>
+</Legal>

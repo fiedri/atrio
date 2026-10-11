@@ -1,4 +1,4 @@
-import type { BusinessTemplate, StylesOverride } from './business';
+import type { BusinessTemplate, HexColor, StylesOverride } from './business';
 
 export type DocumentStatus = 'draft' | 'published' | 'archived';
 
@@ -21,7 +21,17 @@ export interface Document {
   description?: string;
   status: DocumentStatus;
   pages: PageImagePath[];
-  /** Si se omite, se hereda el del business.json (ver pages/[document].astro). */
   template?: BusinessTemplate;
+  /** Ícono del badge de la tarjeta, sintaxis Iconify. Debe estar en el `include`
+   *  de astro-icon.config o el build no lo encuentra. Opcional: sin ícono la
+   *  tarjeta se dibuja sin badge. */
+  icon?: string;
+  /** Color propio del badge. Opcional: si falta, cicla por posición. */
+  background?: HexColor;
+  /** Posición en la página del negocio, ascendente. Opcional: los que no lo
+   *  declaran van al final, en orden alfabético. El orden por defecto del
+   *  filesystem es alfabético, y para un restaurante eso deja la carta en el
+   *  medio de la lista. */
+  order?: number;
   styles?: StylesOverride;
 }

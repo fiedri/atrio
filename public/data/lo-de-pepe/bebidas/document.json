@@ -1,7 +1,14 @@
 {
   "title": "Bebidas",
   "status": "draft",
+  "order": 3,
+  "icon": "mdi:glass-cocktail",
+  "background": "#E7B54A",
   "pages": ["./pages/01.webp", "./pages/02.webp", "./pages/03.webp"],
   "template": "pastel-link-hub",
-  "styles": { "colors": { "accent": "#2f6f4e" } }
+  "styles": {
+    "colors": {
+      "accent": "#2f6f4e"
+    }
+  }
 }

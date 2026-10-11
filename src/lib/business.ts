@@ -20,6 +20,8 @@ export interface SocialLink {
   platform: SocialPlatform;
   url: string;
   label?: string;
+  icon?: string;
+  background?: HexColor;
 }
 
 export interface ColorsOverride {
@@ -66,6 +68,12 @@ export interface Business {
   website?: string;
   logo?: string;
   isActive?: boolean;
+  /**
+   * Si se omite es `true`: los negocios que ya existen siguen generando su
+   * página. Con `false` los menús se publican igual pero `/<slug>` no se
+   * genera, y por eso los menús tampoco pueden ofrecer un link de vuelta.
+   */
+  showProfile?: boolean;
   template: BusinessTemplate;
   socialLinks: SocialLink[];
   styles?: StylesOverride;

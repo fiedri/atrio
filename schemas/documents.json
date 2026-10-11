@@ -32,6 +32,20 @@
       "enum": ["editorial", "grid", "gallery", "pastel-link-hub"],
       "description": "Plantilla de este menú. Si se omite, se usa la del business.json."
     },
+    "icon": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Ícono del badge de la tarjeta, en sintaxis Iconify. Ej: \"mdi:glass-cocktail\". Tiene que estar en el `include` de astro.config.mjs o el build no lo encuentra. Sin ícono, la tarjeta se dibuja sin badge."
+    },
+    "background": {
+      "$ref": "businesses.json#/$defs/hexColor",
+      "description": "Color del badge. Si se omite, la tarjeta cicla por posición entre los tres tonos del template. Un color propio siempre lleva texto blanco encima."
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Posición del menú en la página del negocio, de menor a mayor. Opcional: los que no lo declaran van al final, en orden alfabético. Sin esto el orden es el del filesystem, que es alfabético y deja la carta enterrada en el medio."
+    },
     "styles": {
       "allOf": [{ "$ref": "businesses.json#/$defs/stylesOverride" }],
       "description": "Override parcial sobre el tema del negocio. Solo lo que difiera — no repitas el bloque completo. Lo que declares pisa al negocio; lo que omitas se hereda."

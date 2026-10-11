@@ -40,6 +40,10 @@
       "type": "boolean",
       "description": "false oculta el negocio y todos sus menús sin borrar nada."
     },
+    "showProfile": {
+      "type": "boolean",
+      "description": "false genera los menús pero NO la página del negocio. Para los que sólo quieren publicar su carta y nada más. Si se omite es true, así que los negocios existentes no cambian. Cuando es false, los menús tampoco muestran link de vuelta porque no hay a dónde volver."
+    },
     "template": {
       "type": "string",
       "enum": ["editorial", "grid", "gallery", "pastel-link-hub"],
@@ -61,7 +65,8 @@
               "whatsapp",
               "web",
               "tripadvisor",
-              "delivery"
+              "delivery",
+              "email"
             ],
             "description": "Plataforma. Para agregar una, editá este enum."
           },
@@ -73,6 +78,15 @@
           "label": {
             "type": "string",
             "description": "Texto del botón. Si no se declara, el frontend usa el nombre de la plataforma."
+          },
+          "icon": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Icono en sintaxis Iconify. Ej: \"akar-icons:instagram-fill\". Hoy no lo usa la vista: astro-icon.config.mjs mapea platform → icono y manda platform."
+          },
+          "background": {
+            "$ref": "#/$defs/hexColor",
+            "description": "Color de fondo del botón. Sin él se usa el accent del tema."
           }
         },
         "additionalProperties": false
@@ -188,7 +202,7 @@
             }
           },
           "additionalProperties": false,
-          "dependencies": { "videoPoster": ["video"] }
+          "dependencies": { "video": ["videoPoster"], "videoPoster": ["video"] }
         }
       },
       "additionalProperties": false

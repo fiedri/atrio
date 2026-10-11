@@ -1,0 +1,99 @@
+---
+import Layout from '@/layouts/Layout.astro';
+
+interface Props {
+  docTitle: string;
+  lede: string;
+  updated: string;
+  siblingHref: string;
+  siblingLabel: string;
+}
+
+const { docTitle, lede, updated, siblingHref, siblingLabel } = Astro.props;
+---
+
+<Layout title={`${docTitle} — Verve`} platform="verve">
+  <a
+    href="#contenido"
+    data-legal-skip
+    class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-pastel focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+  >
+    Ir al contenido
+  </a>
+
+  <div data-legal-shell class="min-h-dvh w-full bg-background px-4 py-10 sm:px-6 sm:py-14 md:py-20">
+    <article
+      id="contenido"
+      data-legal-sheet
+      class="mx-auto w-full max-w-[42rem] rounded-pastel-lg border border-container-high bg-surface p-6 shadow-pastel-1 sm:p-10 md:p-12"
+    >
+      <header>
+        <div class="flex items-center justify-between border-b border-container-high pb-5">
+          <a
+            href="/"
+            class="font-display text-lg font-extrabold tracking-[-0.02em] text-accent transition-colors hover:text-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            Verve
+          </a>
+          <a
+            href="/"
+            class="text-sm font-medium text-muted underline decoration-container-high underline-offset-4 transition-colors hover:text-accent hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            Volver al inicio
+          </a>
+        </div>
+
+        <h1
+          class="mt-10 font-display text-[2rem] font-extrabold leading-[1.14] tracking-[-0.03em] text-ink sm:text-[2.5rem] md:text-[2.75rem]"
+        >
+          {docTitle}
+        </h1>
+        <p class="mt-4 text-sm text-muted">{updated}</p>
+        <p class="mt-6 text-base leading-[1.65] text-ink sm:text-[1.0625rem]">
+          {lede}
+        </p>
+      </header>
+
+      <div class="mt-8 text-[0.9375rem] leading-[1.7] text-muted">
+        <slot />
+      </div>
+
+      <footer
+        class="mt-14 flex flex-col gap-3 border-t border-container-high pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p>Verve, desarrollado por ROOT studio</p>
+        <a
+          href={siblingHref}
+          class="font-medium text-accent underline decoration-container-high underline-offset-4 transition-colors hover:text-secondary hover:decoration-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          {siblingLabel}
+        </a>
+      </footer>
+    </article>
+  </div>
+</Layout>
+
+<style is:global>
+  @media print {
+    html,
+    body {
+      background: #ffffff !important;
+    }
+
+    [data-legal-skip] {
+      display: none !important;
+    }
+
+    [data-legal-shell] {
+      padding: 0 !important;
+    }
+
+    [data-legal-sheet] {
+      max-width: none !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+  }
+</style>

@@ -1,80 +1,143 @@
 ---
 import type { Business } from '@/lib/business';
-import { getBusinessStyles } from '@/lib/styles';
+import { getBusinessBackground, getBusinessStyles } from '@/lib/styles';
 import Layout from '@/layouts/Layout.astro';
 import { id, styles } from './index.ts';
 import './tokens.css';
+import { Icon } from 'astro-icon/components';
+import {badgeStyle} from '@/lib/babgeStyle';
+import type { DocumentSummary } from '@/lib/loadData';
 
 interface Props {
   slug: string;
   business: Business;
-  documentPaths: string[];
+  documents: DocumentSummary[];
 }
 
-const { slug, business, documentPaths } = Astro.props;
-
-// El template es el piso de la cascada; el JSON del negocio pisa encima.
+const { slug, business, documents } = Astro.props;
 const styleVars = getBusinessStyles(styles, business.styles);
+const backdrop = getBusinessBackground(styles, business.styles);
+
+const websiteHref = business.website
+  ? `https://${business.website.replace(/^https?:\/\//, '')}`
+  : undefined;
+const hasFooter = Boolean(business.address || websiteHref);
 ---
 
 <Layout title={business.name} template={id} styleVars={styleVars}>
+  {
+    backdrop.video && (
+      <video
+        class="fixed inset-0 -z-10 h-full w-full object-cover"
+        src={backdrop.video}
+        poster={backdrop.videoPoster}
+        autoplay
+        muted
+        loop
+        playsinline
+        aria-hidden="true"
+      />
+    )
+  }
   <main
-    class="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col gap-menu bg-background px-pastel-gutter pb-pastel-xl"
+    class="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col gap-menu bg-background px-pastel-gutter mt-auto"
   >
     <header class="flex flex-col items-center gap-pastel-sm pt-pastel-xl text-center">
       {
         business.logo && (
-          <img
+          <div class="relative">
+            <img
             src={business.logo}
             alt=""
             width="96"
             height="96"
-            class="size-24 rounded-pastel-full border-4 border-surface object-cover shadow-pastel-1"
+            class="size-24 rounded-pastel-full border-4 border-surface object-cover shadow-pastel-2"
           />
+          <div class="bg-secondary-container text-secondary absolute -bottom-1 -right-2 p-1.5 rounded-full">
+            <Icon name="codicon:verified-filled" class={`text-2xl`} />
+          </div>
+          </div>
         )
       }
-      <h1 class="font-display text-3xl font-bold text-ink">{business.name}</h1>
-      {business.description && <p class="text-menu text-muted">{business.description}</p>}
+      <h1 class="font-display text-2xl font-bold text-ink mt-3">{business.name}</h1>
+
+      {business.description && <p class="text-menu text-muted px-2">{business.description}</p>}
+      {business.socialLinks.length > 0 && (
+        <div class="flex flex-wrap items-center justify-center gap-pastel-sm">
+          {
+            business.socialLinks.map((link) => (
+              <a
+                href={link.url}
+                rel="noopener noreferrer"
+                style={link.background ? `--social-bg:${link.background};--social-fg:#fff` : undefined}
+                class="flex size-11 items-center justify-center rounded-pastel-full bg-social"
+              >
+                <Icon name={link.icon} class="size-5" />
+              </a>
+            ))
+          }
+        </div>
+      )}
     </header>
 
-    {
-      business.isActive && (
-        <p class="self-center rounded-pastel-full bg-secondary-container px-pastel-md py-pastel-xs text-sm font-bold text-on-secondary-container">
-          Abierto ahora
-        </p>
-      )
-    }
+
 
     <nav class="flex flex-col gap-pastel-md">
       {
-        documentPaths.map((docPath) => (
+        documents.map((doc, i) => (
           <a
-            href={`/${slug}/${docPath}`}
-            class="flex min-h-14 items-center justify-between rounded-pastel-full bg-surface px-pastel-lg text-menu font-semibold text-ink shadow-pastel-1 hover:shadow-pastel-2 active:translate-y-0.5 active:shadow-pastel-pressed"
+            href={`/${slug}/${doc.slug}`}
+            class="flex min-h-16 items-center gap-pastel-md rounded-pastel-full bg-surface px-pastel-lg shadow-pastel-menu transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-pastel-menu-lift focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:translate-y-px active:shadow-pastel-menu-press motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
-            {docPath}
-            <span aria-hidden="true" class="text-accent">
-              ›
+            {
+              doc.icon && (
+                <span
+                  style={badgeStyle(doc, i)}
+                  class="bg-badge grid size-10 shrink-0 place-items-center rounded-pastel-full"
+                >
+                  <Icon name={doc.icon} class="size-5" />
+                </span>
+              )
+            }
+
+            <span class="flex min-w-0 flex-1 flex-col">
+              <span class="truncate text-menu font-semibold leading-tight text-ink">
+                {doc.title}
+              </span>
+              {doc.description && (
+                <span class="truncate text-sm leading-tight text-muted">{doc.description}</span>
+              )}
+            </span>
+
+            <span class="shrink-0 text-sm tabular-nums text-muted">
+              {doc.pageCount} {doc.pageCount === 1 ? 'página' : 'páginas'}
             </span>
           </a>
         ))
       }
     </nav>
 
-    <footer
-      class="mt-auto flex flex-wrap items-center justify-center gap-pastel-sm bg-glass px-pastel-gutter pt-pastel-sm pb-pastel-sm backdrop-blur-glass"
-    >
-      {
-        business.socialLinks.map((link) => (
-          <a
-            href={link.url}
-            rel="noopener noreferrer"
-            class="flex size-11 items-center justify-center rounded-pastel-full bg-secondary-container/20 text-sm font-bold text-accent"
-          >
-            {link.label ?? link.platform}
-          </a>
-        ))
-      }
-    </footer>
+    {
+      hasFooter && (
+        <footer class="mt-auto flex w-full flex-col items-center gap-1 px-pastel-gutter pt-2 pb-2 text-center text-sm text-muted">
+
+          {business.address && <p>{business.address}</p>}
+          {websiteHref && (
+            <a
+              href={websiteHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline underline-offset-4 hover:text-accent"
+            >
+              {business.website}
+            </a>
+          )}
+
+          <p class="mt-pastel-md text-xs text-muted">
+            powered by <a href="/" class="text-ink underline underline-offset-4 hover:text-accent">verve</a>
+          </p>
+        </footer>
+      )
+    }
   </main>
 </Layout>

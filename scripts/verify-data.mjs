@@ -69,7 +69,19 @@ for (const slug of businesses) {
 
   const logo = business.logo;
   if (logo) {
-    chk(`logo existe (${logo})`, existsSync(resolve(bdir, logo)));
+    // Un logo con slash inicial ("/favicon.ico") es una ruta desde la raíz del
+    // sitio, no relativa al business.json. path.resolve() trata "/favicon.ico"
+    // como absoluta y descarta el directorio base, así que terminaba stat-eando
+    // la raíz del filesystem y daba FALLA sobre un archivo que sí existe.
+    // Hay que decidir explícitamente contra qué se resuelve cada forma.
+    const logoPath = logo.startsWith("/")
+      ? join(here, "..", "public", logo)
+      : resolve(bdir, logo);
+    chk(
+      `logo existe (${logo})`,
+      existsSync(logoPath),
+      `buscado en ${logoPath}, no existe`,
+    );
   }
 
   const docs = readdirSync(bdir).filter((d) =>

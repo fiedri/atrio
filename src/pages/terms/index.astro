@@ -1,0 +1,56 @@
+---
+import Legal from '@/layouts/Legal.astro';
+import LegalSection from '@/components/LegalSection.astro';
+import LegalSummary from '@/components/LegalSummary.astro';
+---
+
+<Legal
+  docTitle="Términos y Condiciones"
+  lede="Verve publica catálogos y perfiles digitales para negocios locales. Estos términos explican qué hacemos nosotros, qué hace cada comercio y hasta dónde llega nuestra responsabilidad."
+  updated="Última actualización: octubre de 2026"
+  siblingHref="/privacity"
+  siblingLabel="Ver Política de Privacidad"
+>
+  <p>
+    Al utilizar los perfiles y catálogos digitales proporcionados por Verve, aceptas los siguientes términos de uso:
+  </p>
+
+  <LegalSummary
+    points={[
+      'El comercio responde por sus precios, productos y promociones.',
+      'Verve aporta la infraestructura y no procesa pagos.',
+      'Los pedidos se redirigen a los canales oficiales de cada comercio.',
+    ]}
+  />
+
+  <div class="mt-12 flex flex-col gap-8">
+    <LegalSection id="naturaleza-del-servicio" number="01" heading="Naturaleza del servicio">
+      <p>
+        Verve provee una plataforma de visualización digital, catálogo e información pública para negocios, profesionales y comercios locales. Verve actúa únicamente como la infraestructura técnica de despliegue.
+      </p>
+    </LegalSection>
+
+    <LegalSection id="responsabilidad-sobre-el-contenido" number="02" heading="Responsabilidad sobre el contenido">
+      <p>
+        <strong class="font-semibold text-ink">Precios y productos:</strong>
+        la precisión de los precios, disponibilidad de productos, menús y promociones mostradas en los perfiles es responsabilidad exclusiva de cada comercio o negocio cliente.
+      </p>
+      <p>
+        <strong class="font-semibold text-ink">Transacciones:</strong>
+        Verve no procesa pagos, compras ni transacciones financieras dentro de la plataforma. Todas las solicitudes de pedidos se redirigen de forma directa a los canales oficiales del comercio (como WhatsApp).
+      </p>
+    </LegalSection>
+
+    <LegalSection id="propiedad-intelectual" number="03" heading="Propiedad intelectual">
+      <p>
+        La estructura, el código fuente, la marca Verve y la identidad gráfica son propiedad exclusiva de ROOT studio. Los logos, marcas y fotografías de productos pertenecen a cada uno de los negocios representados en la plataforma.
+      </p>
+    </LegalSection>
+
+    <LegalSection id="disponibilidad-del-servicio" number="04" heading="Disponibilidad del servicio">
+      <p>
+        Nos esforzamos por mantener un rendimiento del 99.9% de disponibilidad mediante arquitecturas estáticas de alta velocidad. Sin embargo, no nos hacemos responsables por interrupciones temporales derivadas de mantenimientos de red globales fuera de nuestro control.
+      </p>
+    </LegalSection>
+  </div>
+</Legal>

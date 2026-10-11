@@ -24,7 +24,10 @@ const validateDocument = ajv.compile(readSchema("documents.json"));
 // `template` del business — que es el que decide qué página se dibuja — no lo
 // testeaba nadie. Compilado aparte, no con el schema registrado, para que Ajv
 // no lo deduplique.
-const validateBusiness = ajv.compile({ ...readSchema("businesses.json"), $id: "businesses-standalone.json" });
+const validateBusiness = ajv.compile({
+  ...readSchema("businesses.json"),
+  $id: "businesses-standalone.json",
+});
 
 let pass = 0;
 let fail = 0;
@@ -59,9 +62,23 @@ console.log("\n== styles parcial (el caso normal) ==");
 ok("sin styles: hereda todo", true, { ...base });
 ok("styles vacio", true, { ...base, styles: {} });
 ok("solo un color", true, { ...base, styles: { colors: { accent: "#c8963e" } } });
-ok("una sola seccion de colors (override parcial)", true, { ...base, styles: { colors: { accent: "#c8963e" } } });
-ok("colors completo", true, { ...base, styles: { colors: {
-  background: "#000", surface: "#111", text: "#fff", textMuted: "#999", accent: "#d4a056", border: "#222" } } });
+ok("una sola seccion de colors (override parcial)", true, {
+  ...base,
+  styles: { colors: { accent: "#c8963e" } },
+});
+ok("colors completo", true, {
+  ...base,
+  styles: {
+    colors: {
+      background: "#000",
+      surface: "#111",
+      text: "#fff",
+      textMuted: "#999",
+      accent: "#d4a056",
+      border: "#222",
+    },
+  },
+});
 ok("solo background.image", true, { ...base, styles: { background: { image: "./bg.webp" } } });
 ok("hex corto", true, { ...base, styles: { colors: { accent: "#fff" } } });
 ok("spacing completo", true, { ...base, styles: { spacing: { gap: 8, padding: 16, radius: 0 } } });
@@ -72,6 +89,27 @@ ok("template gallery", true, { ...base, template: "gallery" });
 ok("template pastel-link-hub", true, { ...base, template: "pastel-link-hub" });
 ok("template inventado", false, { ...base, template: "neon" });
 ok("theme (nombre viejo)", false, { ...base, theme: "dark" });
+
+console.log("\n== badge del menú: icon y background ==");
+ok("icon válido", true, { ...base, icon: "mdi:glass-cocktail" });
+ok("icon de otra colección", true, { ...base, icon: "akar-icons:wine-glass" });
+ok("background hex largo", true, { ...base, background: "#E7B54A" });
+ok("background hex corto", true, { ...base, background: "#fff" });
+ok("sin icon ni background (ciclo por posición)", true, { ...base });
+ok("icon string vacío", false, { ...base, icon: "" });
+ok("icon no-string", false, { ...base, icon: 42 });
+ok("background no-hex", false, { ...base, background: "mostaza" });
+ok("background sin #", false, { ...base, background: "E7B54A" });
+ok("background con 7 dígitos", false, { ...base, background: "#E7B54AA" });
+
+console.log("\n== orden de los menús ==");
+ok("order entero", true, { ...base, order: 1 });
+ok("order 0", true, { ...base, order: 0 });
+ok("order alto", true, { ...base, order: 99 });
+ok("sin order (alphabetico)", true, { ...base });
+ok("order decimal", false, { ...base, order: 1.5 });
+ok("order negativo", false, { ...base, order: -1 });
+ok("order string", false, { ...base, order: "primero" });
 
 console.log("\n== styles inválido ==");
 ok("color no-hex", false, { ...base, styles: { colors: { accent: "rojo" } } });
@@ -89,7 +127,7 @@ ok("video con poster", true, {
   ...base,
   styles: { background: { video: "./bg.mp4", videoPoster: "./p.webp" } },
 });
-ok("video sin poster", true, { ...base, styles: { background: { video: "./bg.mp4" } } });
+ok("video sin poster", false, { ...base, styles: { background: { video: "./bg.mp4" } } });
 ok("poster sin video", false, {
   ...base,
   styles: { background: { videoPoster: "./p.webp" } },
@@ -128,8 +166,7 @@ const businessBase = {
   socialLinks: [{ platform: "instagram", url: "https://instagram.com/lodopepe" }],
 };
 
-const okBusiness = (label, shouldPass, doc) =>
-  check(label, shouldPass, validateBusiness, doc);
+const okBusiness = (label, shouldPass, doc) => check(label, shouldPass, validateBusiness, doc);
 
 console.log("\n== business mínimo válido ==");
 okBusiness("sin styles", true, { ...businessBase });
@@ -140,6 +177,38 @@ okBusiness("template editorial (stub, válido para el schema)", true, {
   template: "editorial",
 });
 okBusiness("template grid", true, { ...businessBase, template: "grid" });
+
+console.log("\n== showProfile ==");
+okBusiness("showProfile true", true, { ...businessBase, showProfile: true });
+okBusiness("showProfile false", true, { ...businessBase, showProfile: false });
+okBusiness("sin showProfile (default true)", true, { ...businessBase });
+okBusiness("showProfile como string", false, { ...businessBase, showProfile: "false" });
+okBusiness("showProfile como número", false, { ...businessBase, showProfile: 0 });
+
+console.log("\n== platform email en el ribbon ==");
+okBusiness("socialLinks platform email", true, {
+  ...businessBase,
+  socialLinks: [{ platform: "email", url: "mailto:hola@lodopepe.ar" }],
+});
+okBusiness("platform email con icon y background", true, {
+  ...businessBase,
+  socialLinks: [
+    {
+      platform: "email",
+      url: "mailto:hola@lodopepe.ar",
+      icon: "carbon:email",
+      background: "#D44638",
+    },
+  ],
+});
+okBusiness("platform inventado", false, {
+  ...businessBase,
+  socialLinks: [{ platform: "telegram", url: "https://t.me/x" }],
+});
+okBusiness("socialLink sin url", false, {
+  ...businessBase,
+  socialLinks: [{ platform: "email" }],
+});
 okBusiness("template gallery", true, { ...businessBase, template: "gallery" });
 
 console.log("\n== business template inválido ==");
@@ -170,6 +239,24 @@ okBusiness("styles con color no-hex", false, {
   ...businessBase,
   styles: { colors: { accent: "rojo" } },
 });
+
+/* `icon` y `background` son campos de un socialLink, o sea de business.json, no
+   de documents.json: van por okBusiness y no por ok. El $ref a hexColor los
+   mete en el MISMO patrón que los colores del tema, así que "rojo" y "E1306C"
+   sin # tienen que caer en vez de colarse. */
+console.log("\n== business socialLinks: icon y background ==");
+const social = (extra) => ({
+  ...businessBase,
+  socialLinks: [{ platform: "instagram", url: "https://instagram.com/lodopepe", ...extra }],
+});
+
+okBusiness("icon válido (sintaxis Iconify)", true, social({ icon: "akar-icons:instagram-fill" }));
+okBusiness("background hex de 6 dígitos", true, social({ background: "#E1306C" }));
+okBusiness("background hex de 3 dígitos", true, social({ background: "#fff" }));
+okBusiness("sin icon ni background (ambos opcionales)", true, social({}));
+okBusiness("background no-hex", false, social({ background: "rojo" }));
+okBusiness("background hex sin #", false, social({ background: "E1306C" }));
+okBusiness("icon no-string", false, social({ icon: 123 }));
 
 console.log(`\n== ${pass} OK / ${fail} FALLAS ==`);
 process.exit(fail ? 1 : 0);
