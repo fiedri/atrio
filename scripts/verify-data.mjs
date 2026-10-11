@@ -13,7 +13,7 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const MENUS = join(here, "..", "src", "data");
+const MENUS = join(here, "..", "public", "data");
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 addFormats(ajv);

@@ -3,7 +3,7 @@ import path from 'node:path';
 import type { Business } from './business';
 import type { Document } from './document';
 
-const DATA_DIR = path.join(process.cwd(), 'src', 'data');
+const DATA_DIR = path.join(process.cwd(), 'public', 'data');
 
 export function listBusinessSlugs(): string[] {
   if (!fs.existsSync(DATA_DIR)) return [];

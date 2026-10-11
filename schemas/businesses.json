@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://verve.local/schemas/business.json",
+  "$id": "https://atrio.local/schemas/business.json",
   "title": "Business",
   "description": "Un negocio. El archivo vive en public/menus/{slug}/business.json. El slug es el nombre de la carpeta, no se repite acá.",
   "type": "object",

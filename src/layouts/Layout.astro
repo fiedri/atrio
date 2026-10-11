@@ -1,6 +1,6 @@
 ---
 import "@/styles/global.css";
-import "@/styles/verve.css";
+import "@/styles/atrio.css";
 import { getBusinessStyles } from "@/lib/styles";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
   styleVars?: Record<string, string>;
 }
 
-const { title = "Verve", template, platform, styleVars } = Astro.props;
+const { title = "Atrio", template, platform, styleVars } = Astro.props;
 
 const styles = platform ? undefined : (styleVars ?? getBusinessStyles());
 
