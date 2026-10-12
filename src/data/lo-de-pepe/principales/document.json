@@ -4,7 +4,7 @@
   "status": "published",
   "order": 2,
   "icon": "mdi:bowl-mix",
-  "pages": ["./pages/01.webp", "./pages/02.webp"],
+  "pages": ["/business/lo-de-pepe/principales/01.webp", "/business/lo-de-pepe/principales/02.webp"],
   "styles": {
     "colors": {
       "background": "#f6f4ef",

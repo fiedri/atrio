@@ -17,8 +17,6 @@ interface Props {
 
 const { slug, documentSlug, business, document } = Astro.props;
 
-const pageUrl = (page: string) => `/data/${slug}/${documentSlug}/${page.replace(/^\.\//, '')}`;
-
 const styleVars = getBusinessStyles(styles, business.styles, document.styles);
 const backdrop = getBusinessBackground(styles, business.styles, document.styles);
 
@@ -115,7 +113,7 @@ const hasProfile = business.showProfile !== false;
     }
 
     <div class="px-5 justify-center items-center">
-      <FlipBook images={document.pages.map((page) => pageUrl(page))} client:only="svelte" />
+      <FlipBook images={document.pages} client:only="svelte" />
     </div>
 
     <noscript>
@@ -124,7 +122,7 @@ const hasProfile = business.showProfile !== false;
           document.pages.map((page) => (
             <li>
               <img
-                src={pageUrl(page)}
+                src={page}
                 alt=""
                 loading="lazy"
                 class="w-full rounded-pastel-lg border border-border bg-surface shadow-pastel-1"

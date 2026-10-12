@@ -13,7 +13,7 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const MENUS = join(here, "..", "public", "data");
+const MENUS = join(here, "..", "src", "data");
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 addFormats(ajv);
@@ -32,7 +32,6 @@ const validateDocument = ajv.compile(loadSchema("documents.json"));
 let pass = 0;
 let fail = 0;
 
-/** El formateo lo manda prettier, no nosotros: delegamos. */
 function chkPrettier(file) {
   let okFormat = true;
   try {
@@ -69,11 +68,6 @@ for (const slug of businesses) {
 
   const logo = business.logo;
   if (logo) {
-    // Un logo con slash inicial ("/favicon.ico") es una ruta desde la raíz del
-    // sitio, no relativa al business.json. path.resolve() trata "/favicon.ico"
-    // como absoluta y descarta el directorio base, así que terminaba stat-eando
-    // la raíz del filesystem y daba FALLA sobre un archivo que sí existe.
-    // Hay que decidir explícitamente contra qué se resuelve cada forma.
     const logoPath = logo.startsWith("/")
       ? join(here, "..", "public", logo)
       : resolve(bdir, logo);
