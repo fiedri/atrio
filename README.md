@@ -23,18 +23,19 @@ Los JSON referencian las imágenes como URLs públicas absolutas (`/business/<sl
 ## Guías
 
 - [Cómo agregar un negocio](./docs/add_business.md) — estructura de carpetas y reglas para publicar un negocio nuevo.
+- [Contribuir](./docs/CONTRIBUTING.md) — setup del proyecto y cómo enviar un PR.
 
 ## Estructura del repo
 
-| Ruta | Qué es |
-| --- | --- |
-| `src/data/` | Datos declarativos de cada negocio (business + menús) |
-| `public/business/` | Imágenes de páginas y activos |
-| `src/pages/` | Rutas del sitio (perfil de negocio, menú, páginas legales) |
-| `src/templates/` | Plantillas de presentación. `pastel-link-hub` es la única implementada; `editorial`, `grid`, `gallery` son stubs |
-| `src/lib/` | Lógica: carga de datos, resolución de templates y estilos |
-| `schemas/` | JSON Schema que validan los datos |
-| `scripts/` | Verificación de schemas y de datos (`npm run verify`) |
+| Ruta               | Qué es                                                                                                           |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `src/data/`        | Datos declarativos de cada negocio (business + menús)                                                            |
+| `public/business/` | Imágenes de páginas y activos                                                                                    |
+| `src/pages/`       | Rutas del sitio (perfil de negocio, menú, páginas legales)                                                       |
+| `src/templates/`   | Plantillas de presentación. `pastel-link-hub` es la única implementada; `editorial`, `grid`, `gallery` son stubs |
+| `src/lib/`         | Lógica: carga de datos, resolución de templates y estilos                                                        |
+| `schemas/`         | JSON Schema que validan los datos                                                                                |
+| `scripts/`         | Verificación de schemas y de datos (`npm run verify`)                                                            |
 
 ## Requisitos
 
@@ -43,14 +44,14 @@ Los JSON referencian las imágenes como URLs públicas absolutas (`/business/<sl
 
 ## Comandos
 
-| Comando | Acción |
-| --- | --- |
-| `pnpm install` | Instala dependencias |
-| `pnpm dev` | Servidor de desarrollo en `http://localhost:4321` |
+| Comando                  | Acción                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| `pnpm install`           | Instala dependencias                                                           |
+| `pnpm dev`               | Servidor de desarrollo en `http://localhost:4321`                              |
 | `astro dev --background` | Dev server en background (`astro dev stop` / `status` / `logs` para manejarlo) |
-| `pnpm verify` | Valida schemas + datos + formato (lo corre el build automáticamente) |
-| `pnpm build` | Build de producción a `./dist/` |
-| `pnpm preview` | Previsualiza el build local |
+| `pnpm verify`            | Valida schemas + datos + formato (lo corre el build automáticamente)           |
+| `pnpm build`             | Build de producción a `./dist/`                                                |
+| `pnpm preview`           | Previsualiza el build local                                                    |
 
 Con `pnpm dev`, cada negocio vive en `http://localhost:4321/<slug>` y cada menú en `http://localhost:4321/<slug>/<menu>`.
 

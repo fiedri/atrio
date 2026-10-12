@@ -2,12 +2,12 @@ import type { StylesOverride } from "./business";
 
 export const BASE_STYLES = {
   colors: {
-    background: '#fef8f4',
-    surface: '#ffffff',
-    text: '#1d1b19',
-    textMuted: '#554245',
-    accent: '#a03b56',
-    border: '#dbc0c4',
+    background: "#fef8f4",
+    surface: "#ffffff",
+    text: "#1d1b19",
+    textMuted: "#554245",
+    accent: "#a03b56",
+    border: "#dbc0c4",
   },
   typography: {
     fontFamily: '"Quicksand", system-ui, -apple-system, "Segoe UI", sans-serif',
@@ -21,7 +21,7 @@ export const BASE_STYLES = {
     radius: 28, // rounded-3xl 1.75rem
   },
   background: {
-    image: '',
+    image: "",
   },
 };
 
@@ -72,24 +72,24 @@ export function getBusinessStyles(
   const backdrop = resolveBackground([templateStyles, businessStyles, documentStyles]);
 
   return {
-    '--surface-background': colors.background,
-    '--surface-surface': colors.surface,
-    '--surface-ink': colors.text,
-    '--surface-muted': colors.textMuted,
-    '--surface-accent': colors.accent,
-    '--surface-border': colors.border,
+    "--background": colors.background,
+    "--surface": colors.surface,
+    "--ink": colors.text,
+    "--muted": colors.textMuted,
+    "--accent": colors.accent,
+    "--border": colors.border,
 
-    '--type-font': typography.fontFamily,
-    '--type-weight-heading': String(typography.headingWeight),
-    '--type-weight-body': String(typography.bodyWeight),
-    '--type-scale': String(typography.scale),
+    "--type-font": typography.fontFamily,
+    "--type-weight-heading": String(typography.headingWeight),
+    "--type-weight-body": String(typography.bodyWeight),
+    "--type-scale": String(typography.scale),
 
-    '--space-padding': `${spacing.padding}px`,
-    '--space-gap': `${spacing.gap}px`,
-    '--space-radius': `${spacing.radius}px`,
+    "--space-padding": `${spacing.padding}px`,
+    "--space-gap": `${spacing.gap}px`,
+    "--space-radius": `${spacing.radius}px`,
 
-    '--backdrop': backdrop.image ? `url('${backdrop.image}')` : 'none',
-    '--backdrop-poster': backdrop.videoPoster ? `url('${backdrop.videoPoster}')` : 'none',
+    "--backdrop": backdrop.image ? `url('${backdrop.image}')` : "none",
+    "--backdrop-poster": backdrop.videoPoster ? `url('${backdrop.videoPoster}')` : "none",
   };
 }
 
@@ -100,7 +100,7 @@ export interface ResolvedBackground {
 }
 
 function resolveBackground(levels: (Partial<StylesOverride> | undefined)[]): ResolvedBackground {
-  const pick = (key: 'image' | 'video' | 'videoPoster') => {
+  const pick = (key: "image" | "video" | "videoPoster") => {
     let value: string | undefined;
     for (const level of levels) {
       const declared = level?.background?.[key];
@@ -109,11 +109,11 @@ function resolveBackground(levels: (Partial<StylesOverride> | undefined)[]): Res
     return value;
   };
 
-  const video = pick('video');
-  const videoPoster = pick('videoPoster');
+  const video = pick("video");
+  const videoPoster = pick("videoPoster");
 
   return {
-    image: pick('image'),
+    image: pick("image"),
     video: video && videoPoster ? video : undefined,
     videoPoster,
   };

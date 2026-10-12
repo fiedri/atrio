@@ -1,80 +1,64 @@
-html[data-template='pastel-link-hub'] {
+html[data-template="pastel-link-hub"] {
+  --secondary: #006a65;
+  --on-secondary: #ffffff;
+  --secondary-container: #79f3ea;
+  --on-secondary-container: #006f69;
 
-  --pastel-secondary: #006a65;
-  --pastel-on-secondary: #ffffff;
-  --pastel-secondary-container: #79f3ea;
-  --pastel-on-secondary-container: #006f69;
+  --tertiary: #785a00;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #cfa53f;
+  --on-tertiary-container: #513c00;
 
-  --pastel-tertiary: #785a00;
-  --pastel-on-tertiary: #ffffff;
-  --pastel-tertiary-container: #cfa53f;
-  --pastel-on-tertiary-container: #513c00;
+  --primary-container: #ff85a1;
+  --on-primary-container: #771b38;
 
+  --on-accent: #ffffff;
 
-  --pastel-primary-container: #ff85a1;
-  --pastel-on-primary-container: #771b38;
+  --container-lowest: #ffffff;
+  --container-low: #f8f2ef;
+  --container: #f3ede9;
+  --container-high: #ede7e3;
+  --container-highest: #e7e1de;
 
+  --type-font-display: "Comfortaa", "Quicksand", ui-rounded, system-ui, sans-serif;
 
-  --pastel-on-accent: #ffffff;
+  --radius-sm: 0.5rem;
+  --radius: 1rem;
+  --radius-md: 1.5rem;
+  --radius-lg: 2rem;
+  --radius-xl: 3rem;
+  --radius-full: 9999px;
 
+  --gutter: 1rem;
+  --gutter-mobile: 0.75rem;
+  --margin: 1.25rem;
+  --margin-mobile: 1rem;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.875rem;
+  --space-lg: 1.25rem;
+  --space-xl: 2rem;
 
-  --pastel-container-lowest: #ffffff;
-  --pastel-container-low: #f8f2ef;
-  --pastel-container: #f3ede9;
-  --pastel-container-high: #ede7e3;
-  --pastel-container-highest: #e7e1de;
+  --shadow-1: 0 8px 24px -4px rgba(255, 133, 161, 0.14), 0 2px 6px 0 rgba(61, 46, 57, 0.04);
+  --shadow-2: 0 14px 32px -6px rgba(255, 133, 161, 0.22), 0 4px 10px 0 rgba(61, 46, 57, 0.06);
+  --shadow-pressed: 0 2px 8px rgba(61, 46, 57, 0.08);
 
-  --type-font-display: 'Comfortaa', 'Quicksand', ui-rounded, system-ui, sans-serif;
-
-  --pastel-radius-sm: 0.5rem;
-  --pastel-radius: 1rem;
-  --pastel-radius-md: 1.5rem;
-  --pastel-radius-lg: 2rem;
-  --pastel-radius-xl: 3rem;
-  --pastel-radius-full: 9999px;
-
-
-  --pastel-gutter: 1rem;
-  --pastel-gutter-mobile: 0.75rem;
-  --pastel-margin: 1.25rem;
-  --pastel-margin-mobile: 1rem;
-  --pastel-space-xs: 0.25rem;
-  --pastel-space-sm: 0.5rem;
-  --pastel-space-md: 0.875rem;
-  --pastel-space-lg: 1.25rem;
-  --pastel-space-xl: 2rem;
-
-
-  --pastel-shadow-1: 0 8px 24px -4px rgba(255, 133, 161, 0.14),
-    0 2px 6px 0 rgba(61, 46, 57, 0.04);
-  --pastel-shadow-2: 0 14px 32px -6px rgba(255, 133, 161, 0.22),
-    0 4px 10px 0 rgba(61, 46, 57, 0.06);
-  --pastel-shadow-pressed: 0 2px 8px rgba(61, 46, 57, 0.08);
-
-  --pastel-menu-shadow:
-    0 1px 2px 0 rgba(61, 46, 57, 0.1),
-    0 6px 14px -4px rgba(61, 46, 57, 0.1),
+  --menu-shadow:
+    0 1px 2px 0 rgba(61, 46, 57, 0.1), 0 6px 14px -4px rgba(61, 46, 57, 0.1),
     0 14px 30px -10px rgba(255, 133, 161, 0.34);
-  --pastel-menu-shadow-lift:
-    0 2px 4px 0 rgba(61, 46, 57, 0.1),
-    0 12px 24px -6px rgba(61, 46, 57, 0.12),
-    0 28px 52px -14px rgba(255, 133, 161, 0.46),
+  --menu-shadow-lift:
+    0 2px 4px 0 rgba(61, 46, 57, 0.1), 0 12px 24px -6px rgba(61, 46, 57, 0.12),
+    0 28px 52px -14px rgba(255, 133, 161, 0.46), inset 1px 1px 0 rgba(255, 255, 255, 0.9);
+  --menu-shadow-press: 0 1px 1px 0 rgba(61, 46, 57, 0.14), 0 2px 5px 0 rgba(61, 46, 57, 0.08);
 
-    inset 1px 1px 0 rgba(255, 255, 255, 0.9);
-  --pastel-menu-shadow-press:
-    0 1px 1px 0 rgba(61, 46, 57, 0.14),
-    0 2px 5px 0 rgba(61, 46, 57, 0.08);
+  --glass: rgba(255, 249, 245, 0.85);
+  --glass-blur: 16px;
 
-  --pastel-glass: rgba(255, 249, 245, 0.85);
-  --pastel-glass-blur: 16px;
-
-  --pastel-book-shadow:
-    0 2px 0 var(--pastel-container-high),
-    0 4px 0 var(--pastel-container),
+  --book-shadow:
+    0 2px 0 var(--container-high), 0 4px 0 var(--container),
     0 16px 28px -12px rgba(61, 46, 57, 0.16);
 }
 
-
-html[data-template='pastel-link-hub'] .stf__parent {
-  box-shadow: var(--pastel-book-shadow);
+html[data-template="pastel-link-hub"] .stf__parent {
+  box-shadow: var(--book-shadow);
 }
