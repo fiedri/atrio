@@ -4,7 +4,11 @@
   "order": 3,
   "icon": "mdi:glass-cocktail",
   "background": "#E7B54A",
-  "pages": ["/business/lo-de-pepe/bebidas/01.webp", "/business/lo-de-pepe/bebidas/02.webp", "/business/lo-de-pepe/bebidas/03.webp"],
+  "pages": [
+    "/business/lo-de-pepe/bebidas/01.webp",
+    "/business/lo-de-pepe/bebidas/02.webp",
+    "/business/lo-de-pepe/bebidas/03.webp"
+  ],
   "template": "pastel-link-hub",
   "styles": {
     "colors": {

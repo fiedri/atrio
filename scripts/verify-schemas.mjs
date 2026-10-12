@@ -51,7 +51,7 @@ const ok = (label, shouldPass, doc) => check(label, shouldPass, validateDocument
 const base = {
   title: "Carta Principal",
   status: "published",
-  pages: ["./pages/01.webp", "./pages/02.webp"],
+  pages: ["/business/mi-negocio/carta/01.webp", "/business/mi-negocio/carta/02.webp"],
 };
 
 console.log("== Documento mínimo válido ==");
@@ -134,20 +134,23 @@ ok("poster sin video", false, {
 });
 
 console.log("\n== Campos obligatorios ==");
-ok("sin title", false, { status: "published", pages: ["./pages/01.webp"] });
-ok("sin status", false, { title: "Carta", pages: ["./pages/01.webp"] });
+ok("sin title", false, { status: "published", pages: ["/business/mi-negocio/carta/01.webp"] });
+ok("sin status", false, { title: "Carta", pages: ["/business/mi-negocio/carta/01.webp"] });
 ok("sin pages", false, { title: "Carta", status: "published" });
 ok("objeto vacío", false, {});
 
 console.log("\n== status y pages ==");
 ok("status inválido", false, { ...base, status: "public" });
 ok("archived", true, { ...base, status: "archived" });
-ok("página sin pad de 2 dígitos", false, { ...base, pages: ["./pages/1.webp"] });
-ok("página fuera de ./pages", false, { ...base, pages: ["/imagenes/01.webp"] });
-ok("página .png en vez de .webp", false, { ...base, pages: ["./pages/01.png"] });
+ok("página sin pad de 2 dígitos", false, { ...base, pages: ["/business/mi-negocio/carta/1.webp"] });
+ok("página fuera de /business", false, { ...base, pages: ["/imagenes/01.webp"] });
+ok("página .png en vez de .webp", false, { ...base, pages: ["/business/mi-negocio/carta/01.png"] });
 ok("muchas páginas", true, {
   ...base,
-  pages: Array.from({ length: 14 }, (_, i) => `./pages/${String(i + 1).padStart(2, "0")}.webp`),
+  pages: Array.from(
+    { length: 14 },
+    (_, i) => `/business/mi-negocio/carta/${String(i + 1).padStart(2, "0")}.webp`,
+  ),
 });
 
 console.log("\n== typos (el motivo de additionalProperties:false) ==");

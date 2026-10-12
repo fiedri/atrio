@@ -1,7 +1,7 @@
 /**
- * Valida cada JSON de public/data contra los schemas, y ademas comprueba que
- * las rutas de pages apunten a archivos que existen de verdad. Un schema puede
- * ser correcto y el referenciar un archivo que no está.
+ * Valida cada JSON de src/data contra los schemas, y ademas comprueba que
+ * las rutas de pages apunten a archivos que existen de verdad en public/.
+ * Un schema puede ser correcto y el referenciar un archivo que no está.
  *
  *   node scripts/verify-data.mjs
  */
@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const MENUS = join(here, "..", "src", "data");
+const PUBLIC = join(here, "..", "public");
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 addFormats(ajv);
@@ -97,14 +98,18 @@ for (const slug of businesses) {
 
     let missing = [];
     for (const p of doc.pages ?? []) {
-      const abs = resolve(ddir, p);
+      // Las páginas son URLs públicas absolutas ("/business/..."). Se resuelven
+      // contra la raíz de public/; si alguna vez vuelve una ruta relativa, se
+      // resuelve contra el document.json como antes.
+      const abs = p.startsWith("/") ? join(PUBLIC, p) : resolve(ddir, p);
       if (!existsSync(abs)) missing.push(p);
       else if (!abs.endsWith(".webp")) missing.push(`${p} (no es .webp)`);
     }
     chk(`las ${doc.pages?.length ?? 0} páginas existen`, missing.length === 0, `faltan: ${missing.join(", ")}`);
 
-    const onDisk = existsSync(join(ddir, "pages"))
-      ? readdirSync(join(ddir, "pages")).filter((f) => f.endsWith(".webp")).length
+    const pagesDir = join(PUBLIC, "business", slug, dslug);
+    const onDisk = existsSync(pagesDir)
+      ? readdirSync(pagesDir).filter((f) => f.endsWith(".webp")).length
       : 0;
     chk(
       `el JSON declara ${doc.pages?.length ?? 0} y hay ${onDisk} en disco`,

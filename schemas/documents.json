@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Document",
-  "description": "Un menú dentro de un negocio. El archivo vive en public/menus/{businessSlug}/{documentSlug}/document.json",
+  "description": "Un menú dentro de un negocio. El archivo vive en src/data/{businessSlug}/{documentSlug}/document.json",
   "type": "object",
   "required": ["title", "status", "pages"],
   "properties": {
@@ -20,11 +20,11 @@
     },
     "pages": {
       "type": "array",
-      "description": "Rutas relativas al document.json. El orden de la lista ES el orden de lectura en la página; el pad de dos dígitos (01, 02, ... 10) es lo que mantiene ese orden correcto al ordenar alfabéticamente.",
+      "description": "URLs públicas absolutas de las imágenes de cada página. Viven en public/business/{businessSlug}/{documentSlug}/ y se sirven tal cual desde el filesystem. El orden de la lista ES el orden de lectura; el pad de dos dígitos (01, 02, ... 10) mantiene ese orden si se ordena alfabéticamente.",
       "items": {
         "type": "string",
-        "pattern": "^\\./pages/[0-9]{2}\\.webp$",
-        "description": "Ruta de la imagen de la página. Ej: \"./pages/01.webp\""
+        "pattern": "^/business/[a-z0-9-]+/[a-z0-9-]+/[0-9]{2}\\.webp$",
+        "description": "URL pública de la página. Ej: \"/business/tu-negocio/carta/01.webp\""
       }
     },
     "template": {

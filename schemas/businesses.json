@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://atrio.local/schemas/business.json",
   "title": "Business",
-  "description": "Un negocio. El archivo vive en public/menus/{slug}/business.json. El slug es el nombre de la carpeta, no se repite acá.",
+  "description": "Un negocio. El archivo vive en src/data/{slug}/business.json. El slug es el nombre de la carpeta, no se repite acá.",
   "type": "object",
   "required": ["name", "template", "socialLinks"],
   "properties": {
@@ -34,7 +34,7 @@
     },
     "logo": {
       "type": "string",
-      "description": "Ruta relativa al business.json. Ej: \"./logo.webp\""
+      "description": "URL pública del logo, que vive en public/. Ej: \"/business/tu-negocio/logo.webp\". Con slash inicial: se resuelve desde la raíz pública."
     },
     "isActive": {
       "type": "boolean",
