@@ -7,7 +7,7 @@ Guía corta para configurar el proyecto y mandar tu primer PR.
 Requisitos: **Node.js >= 22** y **pnpm**.
 
 ```bash
-git clone <url-del-repo> && cd frontend
+git clone <url-del-repo> && cd atrio
 pnpm install
 ```
 
