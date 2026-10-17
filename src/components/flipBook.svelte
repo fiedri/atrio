@@ -127,7 +127,7 @@ let { images = [] } = $props();
                 onclick={() => flip?.flipPrev('top')}
                 disabled={!ready || current === 0}
                 aria-label="Página anterior"
-                class="grid size-11 pointer-events-auto place-items-center rounded-pastel-full border border-border bg-surface text-ink transition disabled:opacity-35 shadow-sm"
+                class="grid size-11 pointer-events-auto place-items-center rounded-pastel-full border border-border bg-surface text-black transition disabled:opacity-35 shadow-sm"
             >
                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"
@@ -141,7 +141,7 @@ let { images = [] } = $props();
                 onclick={() => flip?.flipNext('top')}
                 disabled={!ready || current === total - 1}
                 aria-label="Página siguiente"
-                class="grid size-11 pointer-events-auto place-items-center rounded-pastel-full border border-border bg-surface text-ink transition disabled:opacity-35 shadow-sm"
+                class="grid size-11 pointer-events-auto place-items-center rounded-pastel-full border border-border bg-surface text-black transition disabled:opacity-35 shadow-sm"
             >
                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"

@@ -61,7 +61,7 @@ const hasFooter = Boolean(business.address || websiteHref);
       }
       <h1 class="font-display text-2xl font-bold text-ink mt-3">{business.name}</h1>
 
-      {business.description && <p class="text-menu text-muted px-2">{business.description}</p>}
+      {business.description && <p class="text-menu text-on-secondary px-2">{business.description}</p>}
       {business.socialLinks.length > 0 && (
         <div class="flex flex-wrap items-center justify-center gap-pastel-sm">
           {
@@ -101,7 +101,7 @@ const hasFooter = Boolean(business.address || websiteHref);
             }
 
             <span class="flex min-w-0 flex-1 flex-col">
-              <span class="truncate text-menu font-semibold leading-tight text-ink">
+              <span class="truncate text-menu font-semibold leading-tight text-[#000000]">
                 {doc.title}
               </span>
               {doc.description && (
@@ -119,7 +119,7 @@ const hasFooter = Boolean(business.address || websiteHref);
 
     {
       hasFooter && (
-        <footer class="mt-auto flex w-full flex-col items-center gap-1 px-pastel-gutter pt-2 pb-2 text-center text-sm text-muted">
+        <footer class="mt-auto flex w-full flex-col items-center gap-1 px-pastel-gutter pt-2 pb-2 text-center text-sm text-on-secondary">
 
           {business.address && <p>{business.address}</p>}
           {websiteHref && (
@@ -133,7 +133,7 @@ const hasFooter = Boolean(business.address || websiteHref);
             </a>
           )}
 
-          <p class="mt-pastel-md text-xs text-muted">
+          <p class="mt-pastel-md text-xs text-on-secondary">
             powered by <a href="/" class="text-ink underline underline-offset-4 hover:text-accent">atrio</a>
           </p>
         </footer>

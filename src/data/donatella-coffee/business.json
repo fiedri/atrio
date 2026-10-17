@@ -1,0 +1,29 @@
+{
+  "name": "Donatella Coffee",
+  "description": "Donde la felicidad se saborea.",
+  "address": "Av. independencia, sector tres platos",
+  "phone": "+58 414-6791840",
+  "logo": "/business/dontella/logo.jpeg",
+  "isActive": true,
+  "template": "pastel-link-hub",
+  "socialLinks": [
+    {
+      "platform": "instagram",
+      "url": "https://www.instagram.com/donatella.coffe?igsh=NjR4YWRqMnh6MnVl",
+      "icon": "akar-icons:instagram-fill",
+      "background": "#E1306C"
+    },
+    {
+      "platform": "whatsapp",
+      "url": "https://wa.me/584146791840",
+      "icon": "akar-icons:whatsapp-fill",
+      "background": "#25D366"
+    }
+  ],
+  "styles": {
+    "colors": {
+    "background": "#631313",
+    "text": "#ffffff"
+  }
+  }
+}
