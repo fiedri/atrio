@@ -1,0 +1,11 @@
+{
+  "title": "Donas y Bolleria",
+  "description": "Donas, rosquillas, croissant, cachitos...",
+  "status": "published",
+  "order": 1,
+  "icon": "mdi:silverware-fork-knife",
+  "pages": [
+    "/business/dontella/comida/01.webp",
+    "/business/dontella/comida/02.webp"
+  ]
+}

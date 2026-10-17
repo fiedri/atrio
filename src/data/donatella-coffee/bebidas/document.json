@@ -1,0 +1,11 @@
+{
+  "title": "Bebidas",
+  "description": "Café, té frios, matchas...",
+  "status": "published",
+  "order": 2,
+  "icon": "mdi:silverware-fork-knife",
+  "pages": [
+    "/business/dontella/bebidas/01.webp",
+    "/business/dontella/bebidas/02.webp"
+  ]
+}
