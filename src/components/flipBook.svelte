@@ -111,7 +111,7 @@ let { images = [], imgWidth =400, imgHeight=556 } = $props();
 
         flip.on('init', (e) => {
             total = e.object.getPageCount();
-            current = e.data;
+            current = e.data.page;
         });
         flip.on('flip', (e) => {
             current = e.data;
@@ -152,6 +152,7 @@ let { images = [], imgWidth =400, imgHeight=556 } = $props();
             flip.destroy();
         };
     });
+    $inspect(ready, current)
 </script>
 
 {#if canFlip}
@@ -187,21 +188,12 @@ let { images = [], imgWidth =400, imgHeight=556 } = $props();
             </div>
         {/if}
         
-        <!--
-            Los botones quedan sobre el libro a propósito: en un teléfono el libro
-            mide 432px en una pantalla de 390px, así que no hay lugar "aparte"
-            donde ponerlos, y medido el solape es de 24px al 100% y 110px al
-            140%. La única forma de que no estorben es que se lean como cromo
-            flotante: vidrio esmerilado con el token --glass del template, borde
-            translúcido y sombra, en vez de una pastilla opaca que tapa el menú.
-            El blur es el precio: difumina el contenido de atrás, que es justo lo
-            que pasa cuando el botón cae sobre el medio de una página.
-        -->
+
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none w-[calc(100%+4rem)] px-1.5">
             <button
                 type="button"
                 onclick={() => flip?.flipPrev('top')}
-                disabled={!ready || current === 0}
+                disabled={current === 0}
                 aria-label="Página anterior"
                 class="pointer-events-auto grid size-10 place-items-center rounded-pastel-full border border-border/70 bg-glass/75 text-ink shadow-pastel-2 backdrop-blur-glass backdrop-saturate-150 transition active:scale-95 disabled:opacity-30 motion-reduce:transition-none"
             >
