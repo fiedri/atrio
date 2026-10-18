@@ -9,5 +9,7 @@
     "/business/lo-de-pepe/carta/02.webp",
     "/business/lo-de-pepe/carta/03.webp",
     "/business/lo-de-pepe/carta/04.webp"
-  ]
+  ],
+  "imgWidth": 720,
+  "imgHeight": 1000
 }

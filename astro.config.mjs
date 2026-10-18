@@ -11,10 +11,11 @@ export default defineConfig({
     svelte(),
     icon({
       include: {
-        "akar-icons": ["instagram-fill", "whatsapp-fill"],
+        "akar-icons": ["instagram-fill", "whatsapp-fill", "coffee"],
         arcticons: ["tripadvisor"],
         mdi: ["silverware-fork-knife", "glass-cocktail", "bowl-mix"],
         "simple-icons": [],
+        andrsrxn: ["donut"]
       },
     }),
   ],

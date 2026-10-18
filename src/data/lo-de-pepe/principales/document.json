@@ -5,6 +5,8 @@
   "order": 2,
   "icon": "mdi:bowl-mix",
   "pages": ["/business/lo-de-pepe/principales/01.webp", "/business/lo-de-pepe/principales/02.webp"],
+  "imgWidth": 720,
+  "imgHeight": 1000,
   "styles": {
     "colors": {
       "background": "#f6f4ef",

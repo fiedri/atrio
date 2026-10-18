@@ -14,6 +14,9 @@ importers:
       '@iconify-json/akar-icons':
         specifier: ^1.2.7
         version: 1.2.7
+      '@iconify-json/andrsrxn':
+        specifier: ^1.2.1
+        version: 1.2.1
       '@iconify-json/arcticons':
         specifier: ^1.2.58
         version: 1.2.58
@@ -395,6 +398,9 @@ packages:
 
   '@iconify-json/akar-icons@1.2.7':
     resolution: {integrity: sha512-cw44dCnZgGhm6Tywxm0WALAnDB9AyGkDk7kiLMo2B/Ayt7duZu/uyrsqb55weWUN8Ge2sQAOl8MRtT6bFcLzPg==}
+
+  '@iconify-json/andrsrxn@1.2.1':
+    resolution: {integrity: sha512-baVlqXqjQiDF0O8j3Yq1W6eTCqMKNSurjH8GgVLo1oZZu9vhzTT1oxE0Zdw3AbihWuDPtNwf0BS6/oiDxJ/iJg==}
 
   '@iconify-json/arcticons@1.2.58':
     resolution: {integrity: sha512-oBrvhxt0InVXZojQIyTFpqog4WBVtarEcNYYh7l4Id8GguTTliyUtaSa90fb7L+v1JgwoLJbxuJVsmsab417Uw==}
@@ -2464,6 +2470,10 @@ snapshots:
       tslib: 2.8.1
 
   '@iconify-json/akar-icons@1.2.7':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/andrsrxn@1.2.1':
     dependencies:
       '@iconify/types': 2.0.0
 

@@ -9,6 +9,8 @@
     "/business/lo-de-pepe/bebidas/02.webp",
     "/business/lo-de-pepe/bebidas/03.webp"
   ],
+  "imgWidth": 720,
+  "imgHeight": 1000,
   "template": "pastel-link-hub",
   "styles": {
     "colors": {

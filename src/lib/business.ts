@@ -33,6 +33,29 @@ export interface ColorsOverride {
   border?: HexColor;
 }
 
+/**
+ * Colores propios de las tarjetas de la página del negocio.
+ *
+ * Es hermano de `styles`, no una sección más de la cascada. Las tarjetas se
+ * dibujan en un solo lugar (BusinessView.astro), una por documento y todas con
+ * las mismas clases: por eso va en el business y no en cada document.json, que
+ * serían N copias de un bloque que además no podría variar una tarjeta suelta.
+ *
+ * Cada clave es opcional y resuelve contra su token global equivalente
+ * (`--surface`, `--border`, `--ink`, `--muted`), así que un negocio que no
+ * declare nada ve exactamente lo que veía antes.
+ */
+export interface CardColorsOverride {
+  background?: HexColor; // fondo de la tarjeta
+  border?: HexColor;     // borde de la tarjeta
+  foreground?: HexColor; // texto principal: el título del documento
+  foregroundMuted?: HexColor; // texto secundario: descripción y páginas
+}
+
+export interface CardStylesOverride {
+  colors?: CardColorsOverride;
+}
+
 export interface TypographyOverride {
   fontFamily?: string;
   headingWeight?: number; // 100 - 900
@@ -77,4 +100,7 @@ export interface Business {
   template: BusinessTemplate;
   socialLinks: SocialLink[];
   styles?: StylesOverride;
+  /** Colores propios de las tarjetas del perfil. Solo los declara el negocio:
+   *  ver `CardColorsOverride`. Opcional. */
+  cardStyles?: CardStylesOverride;
 }

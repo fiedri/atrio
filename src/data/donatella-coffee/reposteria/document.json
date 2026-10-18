@@ -3,9 +3,17 @@
   "description": "Donas, rosquillas, croissant, cachitos...",
   "status": "published",
   "order": 1,
-  "icon": "mdi:silverware-fork-knife",
+  "icon": "andrsrxn:donut",
+  "background": "#E0407B",
   "pages": [
-    "/business/dontella/comida/01.webp",
-    "/business/dontella/comida/02.webp"
-  ]
+    "/business/donatella-coffee/reposteria/01.webp",
+    "/business/donatella-coffee/reposteria/02.webp"
+  ],
+  "imgWidth": 1629,
+  "imgHeight": 3543,
+  "styles": {
+    "colors": {
+      "accent": "#ff85a1"
+    }
+  }
 }

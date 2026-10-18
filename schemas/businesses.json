@@ -95,6 +95,10 @@
     "styles": {
       "$ref": "#/$defs/stylesOverride",
       "description": "Tema base del negocio. Todo opcional: lo que no declares se resuelve con los defaults del frontend (BASE_STYLES, src/lib/styles.ts) o con los tokens del template. Solo declara lo que sobreescribas — no copies el bloque completo."
+    },
+    "cardStyles": {
+      "$ref": "#/$defs/cardStylesOverride",
+      "description": "Colores propios de las tarjetas de la página del negocio. Va en el business y no en cada document.json porque las tarjetas se dibujan una sola vez, en BusinessView.astro, todas idénticas. Lo que no declares cae en styles.colors. No aplica a documents.json."
     }
   },
   "additionalProperties": false,
@@ -203,6 +207,36 @@
           },
           "additionalProperties": false,
           "dependencies": { "video": ["videoPoster"], "videoPoster": ["video"] }
+        }
+      },
+      "additionalProperties": false
+    },
+    "cardStylesOverride": {
+      "type": "object",
+      "description": "Colores de las tarjetas del perfil del negocio. Todo opcional: lo que no declares resuelve contra styles.colors.",
+      "properties": {
+        "colors": {
+          "type": "object",
+          "description": "Solo declara los colores de tarjeta que sobreescribas.",
+          "properties": {
+            "background": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Fondo de la tarjeta. Sin él, styles.colors.surface."
+            },
+            "border": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Borde de la tarjeta. Sin él, styles.colors.border."
+            },
+            "foreground": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Texto principal de la tarjeta (el título del documento). Sin él, styles.colors.text."
+            },
+            "foregroundMuted": {
+              "$ref": "#/$defs/hexColor",
+              "description": "Texto secundario de la tarjeta (descripción y contador de páginas). Sin él, styles.colors.textMuted."
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

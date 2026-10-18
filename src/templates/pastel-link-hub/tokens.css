@@ -57,6 +57,20 @@ html[data-template="pastel-link-hub"] {
   --book-shadow:
     0 2px 0 var(--container-high), 0 4px 0 var(--container),
     0 16px 28px -12px rgba(61, 46, 57, 0.16);
+
+  /* Fallback de las tarjetas: si business.json no declara `cardStyles`, la
+     tarjeta usa los tokens globales de la página. Cada `--card-*` apunta a su
+     equivalente, así que tocar `--surface` en el negocio también mueve la
+     tarjeta cuando no hay override.
+
+     INVARIANTE: ninguno de estos cuatro nombres puede aparecer en el `styles` de
+     index.ts. El `style` inline de `<html>` (1,0,0,0) le gana siempre a este
+     selector (0,1,1), así que un nombre repetido hace que el lado CSS se pierda
+     sin error. */
+  --card-bg: var(--surface);
+  --card-border: var(--border);
+  --card-fg: var(--ink);
+  --card-fg-muted: var(--muted);
 }
 
 html[data-template="pastel-link-hub"] .stf__parent {

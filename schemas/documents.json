@@ -46,6 +46,16 @@
       "minimum": 0,
       "description": "Posición del menú en la página del negocio, de menor a mayor. Opcional: los que no lo declaran van al final, en orden alfabético. Sin esto el orden es el del filesystem, que es alfabético y deja la carta enterrada en el medio."
     },
+    "imgWidth": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Ancho en píxeles de las páginas del PDF. Ej: 850. Opcional: sin esto el flipbook usa su ancho por defecto y deforma los menús cuyo PDF no tenga esa proporción. El mínimo es 1 porque page-flip tira \"Invalid width or height\" con 0."
+    },
+    "imgHeight": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Alto en píxeles de las páginas del PDF. Ej: 2125. Opcional, y con el mismo mínimo que imgWidth."
+    },
     "styles": {
       "allOf": [{ "$ref": "businesses.json#/$defs/stylesOverride" }],
       "description": "Override parcial sobre el tema del negocio. Solo lo que difiera — no repitas el bloque completo. Lo que declares pisa al negocio; lo que omitas se hereda."

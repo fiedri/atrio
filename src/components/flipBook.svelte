@@ -1,23 +1,104 @@
 <script>
 import { onMount } from 'svelte';
 import { PageFlip } from 'page-flip';
-let { images = [] } = $props();
+let { images = [], imgWidth =400, imgHeight=556 } = $props();
 
     const canFlip = $derived(images.length >= 2);
 
     let bookElement = $state(null);
+    let zoomWrap = $state(null);
     let flip = $state(null);
     let current = $state(0);
     let total = $state(0);
-    /** El canvas ya tiene tamaño y el libro se puede ver. Antes hay loader. */
     let ready = $state(false);
+
+    /**
+     * Zoom del libro.
+     *
+     * page-flip saca su tamaño del contenedor (`getBlockWidth()`, en
+     * calculateBoundsRect) y lo recalcula en cada `ui.update()`. No hay
+     * `setSettings()` en la librería, así que el zoom no es un ajuste de page-flip:
+     * es el ancho de `zoomWrap`.
+     *
+     * El techo es 1.4 por el modo landscape de page-flip: cuando el bloque pasa
+     * `2 * minWidth` (315 * 2 = 630px) la librería voltea a dos páginas
+     * horizontales y deja de ser un zoom para ser otro modo de lectura. El
+     * contenedor base mide 432px, así que 1.4 da 605px, debajo del umbral.
+     */
+    const ZOOM_MIN = 1;
+    const ZOOM_MAX = 1.4;
+    const ZOOM_STEP = 0.2;
+
+    let zoom = $state(ZOOM_MIN);
+
+    /**
+     * El ancho se escribe imperativamente y el `update()` va enseguida porque
+     * leer `offsetWidth` dentro de page-flip fuerza el reflow pendiente: si se
+     * separaran con un rAF, mediría el ancho viejo.
+     */
+    function applyZoom() {
+        if (!zoomWrap || !flip) return;
+        zoomWrap.style.width = `${zoom * 100}%`;
+        flip.getUI().update();
+    }
+
+    function stepZoom(delta) {
+        const next = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(zoom + delta).toFixed(2)));
+        if (next === zoom) return;
+        zoom = next;
+        applyZoom();
+    }
+
+    /**
+     * Pincha.
+     *
+     * page-flip escucha los toques para voltear páginas, así que un pinche sin
+     * blindaje termina cambiando la página en vez de hacer zoom. Por eso
+     * mientras hay dos dedos el libro queda con `pointer-events: none` y la
+     * librería literalmente no recibe los eventos.
+     *
+     * `pinch.start` congela el zoom con el que empezó el gesto: si se comparara
+     * contra el zoom vivo, mover los dedos de vuelta lo dejaría trabado.
+     */
+    let pinch = null;
+
+    function touchDistance(touches) {
+        const [a, b] = touches;
+        return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    }
+
+    function onTouchStart(e) {
+        if (e.touches.length !== 2) return;
+        const start = touchDistance(e.touches);
+        if (!start) return;
+        pinch = { start, zoom };
+        if (bookElement) bookElement.style.pointerEvents = 'none';
+    }
+
+    function onTouchMove(e) {
+        if (!pinch || e.touches.length !== 2) return;
+        // Sin esto el browser hace su propio pinch-zoom sobre el viewport y
+        // pelea con el nuestro.
+        e.preventDefault();
+        const dist = touchDistance(e.touches);
+        if (!dist) return;
+        zoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(pinch.zoom * (dist / pinch.start)).toFixed(2)));
+        applyZoom();
+    }
+
+    function onTouchEnd(e) {
+        if (e.touches.length >= 2) return;
+        pinch = null;
+        if (bookElement) bookElement.style.pointerEvents = '';
+    }
+
     onMount(() => {
         if (!canFlip || !bookElement) return;
 
         flip = new PageFlip(bookElement, {
 
-            width: 400,
-            height: 556,
+            width: imgWidth,
+            height: imgHeight,
             size: 'stretch',
             minWidth: 315,
             maxWidth: 1600,
@@ -56,20 +137,6 @@ let { images = [] } = $props();
         };
         ui.update();
 
-        /**
-         * El loader cubre sólo el hueco que page-flip no cubre.
-         *
-         * El canvas arranca en 0×0: la librería le da la proporción recién
-         * cuando calcula la geometría en su primer `update()`. Antes de eso no
-         * hay libro, y como el componente es `client:only` tampoco hay nada en
-         * el HTML del server — la página abre con un hueco y el libro aparece
-         * de golpe.
-         *
-         * No hace falta esperar a las imágenes: para eso page-flip ya dibuja
-         * su propio spinner en el canvas mientras `isLoad` es false. Ese
-         * spinner toma el relevo apenas el canvas tiene tamaño, que es
-         * exactamente la condición que se chequea acá.
-         */
         let rafId;
         const waitForCanvas = () => {
             if (canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
@@ -91,19 +158,18 @@ let { images = [] } = $props();
 
 <div class="relative flex flex-col items-center justify-center w-full">
 
-        <div bind:this={bookElement} class="max-w-full my-5"></div>
+        <div
+            bind:this={zoomWrap}
+            class="w-full overflow-x-auto touch-pan-y"
+            style="width: {zoom * 100}%"
+            ontouchstart={onTouchStart}
+            ontouchmove={onTouchMove}
+            ontouchend={onTouchEnd}
+            ontouchcancel={onTouchEnd}
+        >
+            <div bind:this={bookElement} class="max-w-full my-5"></div>
+        </div>
 
-        <!--
-          Loader superpuesto, NO en el flujo. Si ocupara altura Sumada al
-          libro, al desaparecer saltaría el layout justo cuando ya lo estás
-          mirando. Va en `inset-0` con `pointer-events-none` para no tocar la
-          mecánica de tamaños de page-flip, que es delicada: la proporción la
-          calcula la librería con un `padding-bottom` en su wrapper interno.
-
-          Tres marcas que se encienden en cascada, no un spinner genérico:
-          es el mismo lenguaje que el contador de abajo. Una hoja de menú
-          entra detrás de otra.
-        -->
         {#if !ready}
             <div
                 class="absolute inset-0 grid place-items-center pointer-events-none"
@@ -121,13 +187,23 @@ let { images = [] } = $props();
             </div>
         {/if}
         
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none w-[calc(100%+3.5rem)] sm:w-[calc(100%+5rem)] px-2">
+        <!--
+            Los botones quedan sobre el libro a propósito: en un teléfono el libro
+            mide 432px en una pantalla de 390px, así que no hay lugar "aparte"
+            donde ponerlos, y medido el solape es de 24px al 100% y 110px al
+            140%. La única forma de que no estorben es que se lean como cromo
+            flotante: vidrio esmerilado con el token --glass del template, borde
+            translúcido y sombra, en vez de una pastilla opaca que tapa el menú.
+            El blur es el precio: difumina el contenido de atrás, que es justo lo
+            que pasa cuando el botón cae sobre el medio de una página.
+        -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none w-[calc(100%+4rem)] px-1.5">
             <button
                 type="button"
                 onclick={() => flip?.flipPrev('top')}
                 disabled={!ready || current === 0}
                 aria-label="Página anterior"
-                class="grid size-11 pointer-events-auto place-items-center rounded-pastel-full border border-border bg-surface text-black transition disabled:opacity-35 shadow-sm"
+                class="pointer-events-auto grid size-10 place-items-center rounded-pastel-full border border-border/70 bg-glass/75 text-ink shadow-pastel-2 backdrop-blur-glass backdrop-saturate-150 transition active:scale-95 disabled:opacity-30 motion-reduce:transition-none"
             >
                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"
@@ -141,10 +217,10 @@ let { images = [] } = $props();
                 onclick={() => flip?.flipNext('top')}
                 disabled={!ready || current === total - 1}
                 aria-label="Página siguiente"
-                class="grid size-11 pointer-events-auto place-items-center rounded-pastel-full border border-border bg-surface text-black transition disabled:opacity-35 shadow-sm"
+                class="pointer-events-auto grid size-10 place-items-center rounded-pastel-full border border-border/70 bg-glass/75 text-ink shadow-pastel-2 backdrop-blur-glass backdrop-saturate-150 transition active:scale-95 disabled:opacity-30 motion-reduce:transition-none"
             >
                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"
                     aria-hidden="true">
                     <path d="M9 4l8 8-8 8" />
                 </svg>
@@ -169,6 +245,40 @@ let { images = [] } = $props();
                     {typeof current === 'number' ? current + 1 : 1} / {total}
                 </span>
             {/if}
+        </div>
+
+        <div class="flex items-center justify-center gap-pastel-sm">
+            <button
+                type="button"
+                onclick={() => stepZoom(-ZOOM_STEP)}
+                disabled={!ready || zoom <= ZOOM_MIN}
+                aria-label="Alejar"
+                class="grid size-9 pointer-events-auto place-items-center rounded-pastel-full border border-border bg-surface text-black transition disabled:opacity-35 shadow-sm"
+            >
+                <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"
+                    aria-hidden="true">
+                    <path d="M5 12h14" />
+                </svg>
+            </button>
+
+            <span class="min-w-11 text-center text-xs tabular-nums text-muted">
+                {Math.round(zoom * 100)}%
+            </span>
+
+            <button
+                type="button"
+                onclick={() => stepZoom(ZOOM_STEP)}
+                disabled={!ready || zoom >= ZOOM_MAX}
+                aria-label="Acercar"
+                class="grid size-9 pointer-events-auto place-items-center rounded-pastel-full border border-border bg-surface text-black transition disabled:opacity-35 shadow-sm"
+            >
+                <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"
+                    aria-hidden="true">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+            </button>
         </div>
     </div>
 {:else}

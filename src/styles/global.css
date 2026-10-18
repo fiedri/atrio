@@ -32,6 +32,13 @@
   --color-border: var(--border);
   --color-on-accent: var(--on-accent);
 
+  /* Tokens de las tarjetas del perfil. Los resuelve el template como fallback
+     cuando el negocio no declara `cardStyles` en business.json. */
+  --color-card: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-card-fg: var(--card-fg);
+  --color-card-fg-muted: var(--card-fg-muted);
+
   --color-secondary: var(--secondary);
   --color-on-secondary: var(--on-secondary);
   --color-secondary-container: var(--secondary-container);

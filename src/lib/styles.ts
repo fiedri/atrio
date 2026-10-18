@@ -1,4 +1,4 @@
-import type { StylesOverride } from "./business";
+import type { CardStylesOverride, StylesOverride } from "./business";
 
 export const BASE_STYLES = {
   colors: {
@@ -125,4 +125,31 @@ export function getBusinessBackground(
   documentStyles?: StylesOverride,
 ): ResolvedBackground {
   return resolveBackground([templateStyles, businessStyles, documentStyles]);
+}
+
+/**
+ * Variables CSS de las tarjetas del perfil del negocio.
+ *
+ * Aparte de `getBusinessStyles` a propósito: `cardStyles` es hermano de
+ * `styles`, no un quinto nivel de la cascada, y solo business.json lo declara.
+ *
+ * Lo que no se declaró sale `undefined`, y eso es lo correcto: `toStyleString` de
+ * Astro (runtime/server/render/util.js) descarta los valores que no son string
+ * ni número, así que la propiedad no llega al `<html>` y gana el fallback que
+ * declara el template en tokens.css.
+ *
+ * Los tokens son `--card-*` y NO tocan `--surface`/`--border`/`--ink`/`--muted`:
+ * esos son compartidos con siete cosas más (Legal, imágenes del noscript, los
+ * dos botones del flipBook, el borde del logo, el hover del botón de volver).
+ * Un namespace aparte es lo que permite que un negocio tenga tarjetas de un
+ * color y un `--surface` de otro sin que uno le pise al otro.
+ */
+export function getCardStyles(cardStyles?: CardStylesOverride): Record<string, string | undefined> {
+  const colors = cardStyles?.colors ?? {};
+  return {
+    "--card-bg": colors.background,
+    "--card-border": colors.border,
+    "--card-fg": colors.foreground,
+    "--card-fg-muted": colors.foregroundMuted,
+  };
 }
